@@ -20,7 +20,7 @@ export default class Scheduler extends Component {
                             <button>Добавить задачу</button>
                         </form>
                         <div>
-                            <Task/>
+                            <Task />
                         </div>
 
                     </section>
