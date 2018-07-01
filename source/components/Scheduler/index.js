@@ -47,9 +47,10 @@ export default class Scheduler extends Component {
 
     _createTasksAsync = async (message) => {
         console.log(`_createTasksAsync`);
+        console.log(`_createTasksAsync message`, message);
         try {
             this._setTasksFetchingState(true);
-            const tasks = await api.createPost(message);
+            const tasks = await api.createTasks(message);
 
             this.setState((prevState) => ({
                 posts: [tasks, ...prevState.tasks],
@@ -60,25 +61,27 @@ export default class Scheduler extends Component {
             this._setTasksFetchingState(false);
         }
     };
-
     _handleFormSubmit = (e) => {
         e.preventDefault();
         console.log(`handleFormSubmit`);
         this._submitTask();
     };
+    _updateTask = (e) => {
+        const { value } = e.target;
+        console.log('message value - ', value);
+        this.setState({ message: value });
+    };
     _submitTask = () => {
         console.log(`_submitTask`);
         console.log('_submitCommen - State ', this.state);
-
         const { message } = this.state;
-
-        console.log('message - ', message);
+        console.log('Submit message - ', message);
         if (!message) {
             return null;
         }
         const { _createTasksAsync } = this.props;
 
-        _createTasksAsync(message);
+        this._createTasksAsync(message);
         this.setState({ message: "" });
     };
     _setTasksFetchingState = (isSpinning) => {
@@ -86,9 +89,18 @@ export default class Scheduler extends Component {
             isSpinning,
         });
     };
+
+    _submitTaskOnEnter = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            console.log("Enter");
+            this._submitTask();
+        }
+    };
     render () {
         console.log('Render State -', this.state);
         const { isSpinning, message } = this.state;
+
         console.log('Render isSpinning - ', isSpinning);
         console.log('Render message - ', message);
 
@@ -106,7 +118,9 @@ export default class Scheduler extends Component {
                                 maxLength = '50'
                                 placeholder = 'Описaние моей новой задачи'
                                 type = 'text'
-                                // value = { message }
+                                value = { message }
+                                onChange = { this._updateTask }
+                                onKeyPress = { this._submitTaskOnEnter }
                             />
                             <button type = 'submit' >Добавить задачу</button>
                         </form>
