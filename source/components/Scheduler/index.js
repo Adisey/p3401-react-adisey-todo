@@ -66,7 +66,6 @@ export default class Scheduler extends Component {
         console.log(`handleFormSubmit`);
         this._submitTask();
     };
-
     _submitTask = () => {
         console.log(`_submitTask`);
         console.log('_submitCommen - State ', this.state);
@@ -82,15 +81,11 @@ export default class Scheduler extends Component {
         _createTasksAsync(message);
         this.setState({ message: "" });
     };
-
-
     _setTasksFetchingState = (isSpinning) => {
         this.setState({
             isSpinning,
         });
     };
-
-
     render () {
         console.log('Render State -', this.state);
         const { isSpinning, message } = this.state;
