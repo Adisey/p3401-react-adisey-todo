@@ -46,8 +46,8 @@ export default class Scheduler extends Component {
     };
 
     _createTasksAsync = async (message) => {
-        console.log(`_createTasksAsync`);
-        console.log(`_createTasksAsync message`, message);
+        // console.log(`_createTasksAsync`);
+        // console.log(`_createTasksAsync message`, message);
         try {
             this._setTasksFetchingState(true);
             const tasks = await api.createTasks(message);
@@ -68,14 +68,16 @@ export default class Scheduler extends Component {
     };
     _updateTask = (e) => {
         const { value } = e.target;
-        console.log('message value - ', value);
+        // console.log('message value - ', value);
+
         this.setState({ message: value });
     };
     _submitTask = () => {
-        console.log(`_submitTask`);
-        console.log('_submitCommen - State ', this.state);
+        // console.log(`_submitTask`);
+        // console.log('_submitCommen - State ', this.state);
         const { message } = this.state;
-        console.log('Submit message - ', message);
+        // console.log('Submit message - ', message);
+
         if (!message) {
             return null;
         }
@@ -93,16 +95,23 @@ export default class Scheduler extends Component {
     _submitTaskOnEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            console.log("Enter");
+            // console.log("Enter");
             this._submitTask();
         }
     };
     render () {
-        console.log('Render State -', this.state);
-        const { isSpinning, message } = this.state;
-
+        // console.log('Render State -', this.state);
+        const { tasks: userTasks, isSpinning, message } = this.state;
         console.log('Render isSpinning - ', isSpinning);
         console.log('Render message - ', message);
+        const showTasks = userTasks.map((task) => (
+            <Task
+                key = { task.id }
+                { ...task }
+            />
+        ));
+
+        console.log(`showTasks - `, showTasks);
 
         return (
             <section className = { Styles.scheduler }>
@@ -125,7 +134,8 @@ export default class Scheduler extends Component {
                             <button type = 'submit' >Добавить задачу</button>
                         </form>
                         <div>
-                            <Task />
+                            {/*<Task />*/}
+                            <ul><div>{showTasks}</div></ul>
                         </div>
 
                     </section>

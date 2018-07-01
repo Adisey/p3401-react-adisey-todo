@@ -1,5 +1,6 @@
 // Core
 import React, { PureComponent } from 'react';
+import { string, func } from "prop-types";
 
 // Instruments
 import Styles from './styles.m.css';
@@ -18,6 +19,15 @@ export default class Task extends PureComponent {
     });
 
     render () {
-        return <li className = { Styles.task }>Задача: стартовая точка</li>;
+        const {
+            message,
+            completed,
+            favorite,
+            id,
+        } = this.props;
+
+        console.log(`Task # - `, message);
+        // return <li className = { Styles.task }>Задача: стартовая точка</li>;
+        return <li className = { Styles.task }>{id+' '+message}</li>;
     }
 }
