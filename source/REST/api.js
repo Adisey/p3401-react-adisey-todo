@@ -16,6 +16,47 @@ export const api = {
 
         return tasks;
     },
+    async createTasks (message) {
+        const response = await fetch(MAIN_URL, {
+            method:  "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization:  TOKEN,
+            },
+            body: JSON.stringify({ message }),
+        });
+
+        if (response.status !== 200) {
+            throw new Error("Tasks Where not Create");
+        }
+        const { data: tasks } = await response.json();
+
+        return tasks;
+    },
 
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
