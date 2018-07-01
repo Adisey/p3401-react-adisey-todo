@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 // Instruments
 import Styles from './styles.m.css';
+import { api } from '../../REST/api';
 import Spinner from '../Spinner';
 import Task from '../Task';
 
@@ -16,12 +17,38 @@ export default class Scheduler extends Component {
         console.log('componentDidMount App');
 
         // Временно прикручен спинер, потом убрать и включить для асинхроннвх операций обращения к серверу.
-        this.setState({ isSpinning: true });
-        setTimeout(() => {
-            this.setState({ isSpinning: false });
-        }, 6000);
+        // this.setState({ isSpinning: true });
+        // setTimeout(() => {
+        //     this.setState({ isSpinning: false });
+        // }, 6000);
+
+        this._fetchTasksAsync();
 
     }
+
+    _fetchTasksAsync = async () => {
+        // Получение тасков с сервера
+        try {
+            this._setTasksFetchingState(true);
+            const tasks = await api.fetchTasks();
+
+            console.log('tasks -', tasks);
+            this.setState({
+                tasks,
+            });
+
+        } catch ({ message }) {
+            console.error(message);
+        } finally {
+            this._setTasksFetchingState(false);
+        }
+    };
+
+    _setTasksFetchingState = (isSpinning) => {
+        this.setState({
+            isSpinning,
+        });
+    };
 
 
     render () {
