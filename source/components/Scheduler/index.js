@@ -117,41 +117,58 @@ export default class Scheduler extends Component {
             // console.log(`End - _removeTasktAsync`);
         }
     };
-    _favoriteTaskAsync = (id) => {
+    _updateDBTaskAsync = async (updTask) => {
+        try {
+            this._setTasksFetchingState(true);
+            await api.putTasks([updTask]);
+        } catch (response) {
+            console.error(response);
+        } finally {
+            this._setTasksFetchingState(false);
+        }
+    };
+    _updateSateTask = (updTask) => {
+        const id = updTask.id;
+
         this.setState(({ tasks }) => ({
-            tasks: tasks.map((task) => {
-                console.log(task.message, task.favorite);
-                if (task.id === id) {
-                    let {
-                        message,
-                        completed,
-                        favorite,
-                    } = task;
-                    favorite = !favorite;
-                    const updTask = {
-                        id,
-                        message,
-                        completed,
-                        favorite,
-                    };
-                    try {
-                        this._setTasksFetchingState(true);
-                        api.putTasks([updTask]);
-                    } catch (response) {
-                        console.error(response);
-                    } finally {
-                        this._setTasksFetchingState(false);
-                        // console.log(`End - _favoriteTaskAsync`);
-                    }
-                    return updTask;
-                }
-                return task;
-            }),
+            tasks: tasks.map((task) => task.id === id ? updTask : task),
         }));
     };
 
+    _updateSateAndDB = (updTask) => {
+        this._updateSateTask(updTask);
+        this._updateDBTaskAsync(updTask);
+        // Масло масляное, но мне кажется так выглядит более целсно. Дергаешь себе только одну функцию. ;)
+    };
+
+    _favoriteTask = (id) => {
+        const { tasks } = this.state;
+        const currentTask = tasks.filter((task) => task.id === id);
+
+        if (currentTask.length) {
+            let {
+                message,
+                completed,
+                favorite,
+            } = currentTask[0];
+
+            favorite = !favorite;
+            const updTask = {
+                id,
+                message,
+                completed,
+                favorite,
+            };
+
+            this._updateSateAndDB(updTask);
+        } else {
+            console.error(`Task id ${id} not found.`);
+        }
+    };
+
+
     render () {
-    // console.log('Render State -', this.state);
+        // console.log('Render State -', this.state);
         const { tasks: userTasks, isSpinning, message } = this.state;
 
         // console.log('Render isSpinning - ', isSpinning);
@@ -160,13 +177,13 @@ export default class Scheduler extends Component {
             <Task
                 key = { task.id }
                 { ...task }
-                _favoriteTaskAsync = { this._favoriteTaskAsync }
+                _favoriteTask = { this._favoriteTask }
                 _removeTasktAsync = { this._removeTasktAsync }
             />
         ));
 
-        // console.log(`showTasks - `, showTasks);
-        // console.log('this.state', this.state);
+            // console.log(`showTasks - `, showTasks);
+            // console.log('this.state', this.state);
         return (
             <section className = { Styles.scheduler }>
                 <main>

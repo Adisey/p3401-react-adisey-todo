@@ -10,7 +10,7 @@ import Remove from '../../theme/assets/Remove';
 
 export default class Task extends PureComponent {
     static propTypes = {
-        _favoriteTaskAsync: func.isRequired,
+        _favoriteTask: func.isRequired,
         _removeTasktAsync:  func.isRequired,
     };
 
@@ -34,7 +34,7 @@ export default class Task extends PureComponent {
             favorite,
         } = this.props;
 
-        console.log(`Favorite - `, favorite);
+        // console.log(`Favorite - `, favorite);
         // console.log(`this.props`, this.props);
 
         return (
@@ -50,10 +50,10 @@ export default class Task extends PureComponent {
         );
     };
     _favoriteTask = () => {
-        console.log(`Click Favorite`);
-        const { _favoriteTaskAsync, id } = this.props;
+        // console.log(`Click Favorite`);
+        const { _favoriteTask, id } = this.props;
 
-        _favoriteTaskAsync(id);
+        _favoriteTask(id);
     };
     _getRemoveTask = () => {
         return (
@@ -81,8 +81,8 @@ export default class Task extends PureComponent {
         const favorite = this._getFavorite();
         const removeTask = this._getRemoveTask();
 
-        console.log(`Task id - `, id);
-        console.log(`Task name - `, message);
+        // console.log(`Task id - `, id);
+        // console.log(`Task name - `, message);
         // console.log('taskState.uneditable', this.taskState.uneditable);
         // return <li className = { Styles.task }>Задача: стартовая точка</li>;
         return (<li className = { Styles.task }>
