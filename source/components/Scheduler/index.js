@@ -118,45 +118,34 @@ export default class Scheduler extends Component {
         }
     };
     _favoriteTaskAsync = async (id) => {
-        console.log(`Start - _favoriteTaskAsync`);
-
-        let {
-            message,
-            completed,
-            favorite,
-        }= this.state.tasks.filter((task) => task.id === id)[0];
-
-        favorite = !favorite;
-        // console.log(`------------`);
-        // console.log(id);
-        // console.log(message);
-        // console.log(completed);
-        // console.log(favorite);
-        // console.log(`------------`);
-        const updTask = [{
-            id,
-            message,
-            completed,
-            favorite,
-        }];
-
-        console.log('updTask -', updTask);
-        console.log(`------------`);
-
-
-        const aaa = this.state.tasks.filter((task) => task.id === id);
-
-        aaa[0].favorite = !aaa[0].favorite;
-        console.log(`after`, aaa);
-        // ToDo Пока меняем только в стейте, теперь нужно асинхронно запихнуть в базу.
-        try {
-            this._setTasksFetchingState(true);
-            await api.putTasks(updTask);
-        } catch (response) {
-            console.error(response);
-        } finally {
-            this._setTasksFetchingState(false);
-            console.log(`End - _favoriteTaskAsync`);
+        // console.log(`Start - _favoriteTaskAsync`);
+        const { tasks } = this.state;
+        const filteredTask = tasks.filter((task) => task.id === id);
+        if (filteredTask.length) {
+            let {
+                message,
+                completed,
+                favorite,
+            } = filteredTask[0];
+            favorite = !favorite;
+            const updTask = [{
+                id,
+                message,
+                completed,
+                favorite,
+            }];
+            // console.log('updTask -', updTask);
+            try {
+                this._setTasksFetchingState(true);
+                await api.putTasks(updTask);
+            } catch (response) {
+                console.error(response);
+            } finally {
+                this._setTasksFetchingState(false);
+                // console.log(`End - _favoriteTaskAsync`);
+            }
+        } else {
+            console.error(`В стейте нет Task c id:${id}`);
         }
     };
 
@@ -176,6 +165,7 @@ export default class Scheduler extends Component {
         ));
 
         console.log(`showTasks - `, showTasks);
+        console.log('this.state', this.state);
         // ToDo Спросить у Андрейя, почему ререндится страница, при вводе символов в input новой задачи.
 
         return (
