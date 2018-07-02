@@ -35,14 +35,17 @@ export default class Task extends PureComponent {
         } = this.props;
 
         console.log(`Favorite - `, favorite);
-        console.log(`this.props`, this.props);
+        // console.log(`this.props`, this.props);
 
         return (
             <span
                 className = { Styles.toggleTaskFavoriteState }
                 onClick = { this._favoriteTask }>
-                <Star />
-                {favorite?<Star />:null}
+                <Star
+                    checked = {favorite}
+                    color1 = {'#3B8EF3'}
+                />
+                {/*{favorite?<Star />:null}*/}
             </span>
         );
     };
@@ -62,10 +65,9 @@ export default class Task extends PureComponent {
     };
 
     _removeTask = () => {
-        console.log(`Click DELETE!!`);
+        // console.log(`Click DELETE!!`);
         const { _removeTasktAsync, id } = this.props;
-
-        console.log(`id`, id);
+        // console.log(`id`, id);
 
         _removeTasktAsync(id);
     };
@@ -84,21 +86,23 @@ export default class Task extends PureComponent {
         // console.log('taskState.uneditable', this.taskState.uneditable);
         // return <li className = { Styles.task }>Задача: стартовая точка</li>;
         return (<li className = { Styles.task }>
-            <input
+            <div className = { Styles.content }>
+                <div className = { Styles.toggleTaskCompletedState } />
+                <input
                 // disabled = { this.taskState.uneditable }
-                disabled = 'true'
-                maxLength = '50'
-                type = 'text'
-                value = { message }
-            />
-            <section className = { Styles.actions }>
+                    disabled = 'true'
+                    maxLength = '50'
+                    type = 'text'
+                    value = { message }
+                />
+
+            </div>
+            <div className = { Styles.actions }>
                 {favorite}
                 {removeTask}
-
                 {/*<section className = { Styles.updateTaskMessageOnClick } />*/}
                 {/*<Edit />*/}
-
-            </section>
+            </div>
         </li>);
     }
 }

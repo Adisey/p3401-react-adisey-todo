@@ -1,15 +1,22 @@
 // Core
 import React, { Component } from 'react';
+import { string, bool } from "prop-types";
 
 // Imstruments
 import { withSvg } from 'instruments/withSvg';
 
 class Star extends Component {
+    static propTypes = {
+        checked: bool.isRequired,
+        color1: string.isRequired,
+    };
+
+
     render () {
+        // console.log ('STAR this.props - ', this.props);
         const { hover, checked, disabled, color1, color2, color3 } = this.props;
-
         const fill = disabled ? color3 : hover ? color1 : color2;
-
+        // console.log('STAR checked ', checked);
         return checked ? (
             <g>
                 <path

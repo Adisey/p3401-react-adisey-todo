@@ -15,7 +15,7 @@ export default class Scheduler extends Component {
     };
 
     componentDidMount () {
-        console.log('componentDidMount App');
+        // console.log('componentDidMount App');
 
         // Временно прикручен спинер, потом убрать и включить для асинхроннвх операций обращения к серверу.
         // this.setState({ isSpinning: true });
@@ -32,8 +32,8 @@ export default class Scheduler extends Component {
         try {
             this._setTasksFetchingState(true);
             const tasks = await api.fetchTasks();
+            // console.log('tasks -', tasks);
 
-            console.log('tasks -', tasks);
             this.setState({
                 tasks,
             });
@@ -63,7 +63,7 @@ export default class Scheduler extends Component {
     };
     _handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(`handleFormSubmit`);
+        // console.log(`handleFormSubmit`);
         this._submitTask();
     };
     _updateTask = (e) => {
@@ -117,36 +117,37 @@ export default class Scheduler extends Component {
             // console.log(`End - _removeTasktAsync`);
         }
     };
-    _favoriteTaskAsync = async (id) => {
-        // console.log(`Start - _favoriteTaskAsync`);
-        const { tasks } = this.state;
-        const filteredTask = tasks.filter((task) => task.id === id);
-        if (filteredTask.length) {
-            let {
-                message,
-                completed,
-                favorite,
-            } = filteredTask[0];
-            favorite = !favorite;
-            const updTask = [{
-                id,
-                message,
-                completed,
-                favorite,
-            }];
-            // console.log('updTask -', updTask);
-            try {
-                this._setTasksFetchingState(true);
-                await api.putTasks(updTask);
-            } catch (response) {
-                console.error(response);
-            } finally {
-                this._setTasksFetchingState(false);
-                // console.log(`End - _favoriteTaskAsync`);
-            }
-        } else {
-            console.error(`В стейте нет Task c id:${id}`);
-        }
+    _favoriteTaskAsync = (id) => {
+        this.setState(({ tasks }) => ({
+            tasks: tasks.map((task) => {
+                console.log(task.message, task.favorite);
+                if (task.id === id) {
+                    let {
+                        message,
+                        completed,
+                        favorite,
+                    } = task;
+                    favorite = !favorite;
+                    const updTask = {
+                        id,
+                        message,
+                        completed,
+                        favorite,
+                    };
+                    try {
+                        this._setTasksFetchingState(true);
+                        api.putTasks([updTask]);
+                    } catch (response) {
+                        console.error(response);
+                    } finally {
+                        this._setTasksFetchingState(false);
+                        // console.log(`End - _favoriteTaskAsync`);
+                    }
+                    return updTask;
+                }
+                return task;
+            }),
+        }));
     };
 
     render () {
@@ -164,10 +165,8 @@ export default class Scheduler extends Component {
             />
         ));
 
-        console.log(`showTasks - `, showTasks);
-        console.log('this.state', this.state);
-        // ToDo Спросить у Андрейя, почему ререндится страница, при вводе символов в input новой задачи.
-
+        // console.log(`showTasks - `, showTasks);
+        // console.log('this.state', this.state);
         return (
             <section className = { Styles.scheduler }>
                 <main>
