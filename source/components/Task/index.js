@@ -42,6 +42,7 @@ export default class Task extends PureComponent {
                 className = { Styles.toggleTaskFavoriteState }
                 onClick = { this._favoriteTask }>
                 <Star />
+                {favorite?<Star />:null}
             </span>
         );
     };
@@ -93,6 +94,10 @@ export default class Task extends PureComponent {
             <section className = { Styles.actions }>
                 {favorite}
                 {removeTask}
+
+                {/*<section className = { Styles.updateTaskMessageOnClick } />*/}
+                {/*<Edit />*/}
+
             </section>
         </li>);
     }

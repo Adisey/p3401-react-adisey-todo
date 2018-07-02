@@ -10,6 +10,7 @@ export const api = {
         });
 
         if (response.status !== 200) {
+            console.error(`Error response - `, response);
             throw new Error("Tasks Where not loaded");
         }
         const { data: tasks } = await response.json();
@@ -27,23 +28,26 @@ export const api = {
         });
 
         if (response.status !== 200) {
+            console.error(`Error response - `, response);
             throw new Error("Tasks Where not Create");
         }
         const { data: task } = await response.json();
 
         return task;
     },
-    async putTasks (task) {
+    async putTasks (updateTask) {
+        console.log(`putTask received - `, updateTask);
         const response = await fetch(MAIN_URL, {
-            method:  "POST",
+            method:  "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization:  TOKEN,
             },
-            body: JSON.stringify({ message: task }),
+            body: JSON.stringify( updateTask ),
         });
 
         if (response.status !== 200) {
+            console.error(`Error response - `, response);
             throw new Error("Tasks Where not Create");
         }
         const { data: tasks } = await response.json();
@@ -59,6 +63,7 @@ export const api = {
         });
 
         if (response.status !== 204) {
+            console.error(`Error response - `, response);
             throw new Error("Task not delete");
         }
     },
