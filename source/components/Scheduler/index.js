@@ -53,7 +53,7 @@ export default class Scheduler extends Component {
             const tasks = await api.createTasks(message);
 
             this.setState((prevState) => ({
-                posts: [tasks, ...prevState.tasks],
+                tasks: [tasks, ...prevState.tasks],
             }));
         } catch ({ errorMessage }) {
             console.error(errorMessage);
@@ -81,7 +81,9 @@ export default class Scheduler extends Component {
         if (!message) {
             return null;
         }
-        const { _createTasksAsync } = this.props;
+
+        // TODO Кажется эта строка тут не нужна!
+        // const { _createTasksAsync } = this.props;
 
         this._createTasksAsync(message);
         this.setState({ message: "" });
@@ -99,19 +101,50 @@ export default class Scheduler extends Component {
             this._submitTask();
         }
     };
+
+    _removeTasktAsync = async (id) => {
+        // console.log(`Start - _removeTasktAsync`);
+        try {
+            this._setTasksFetchingState(true);
+            await api.removeTask(id);
+            this.setState(({ tasks }) => ({
+                tasks: tasks.filter((task) => task.id !== id),
+            }));
+        } catch ({ errorMessage }) {
+            console.error(errorMessage);
+        } finally {
+            this._setTasksFetchingState(false);
+            // console.log(`End - _removeTasktAsync`);
+        }
+    };
+    _favoriteTaskAsync = (id) => {
+        console.log(`Start - _favoriteTaskAsync`);
+        const aaa = this.state.tasks.filter((task) => task.id === id);
+
+        aaa[0].favorite = true;
+        console.log(`after`, aaa);
+        // ToDo Пока меняем только в стейте, теперь нужно асинхронно запихнуть в базу.
+
+
+    };
+
     render () {
-        // console.log('Render State -', this.state);
+    // console.log('Render State -', this.state);
         const { tasks: userTasks, isSpinning, message } = this.state;
-        console.log('Render isSpinning - ', isSpinning);
-        console.log('Render message - ', message);
+
+        // console.log('Render isSpinning - ', isSpinning);
+        // console.log('Render message - ', message);
         const showTasks = userTasks.map((task) => (
             <Task
                 key = { task.id }
                 { ...task }
+                _favoriteTaskAsync = { this._favoriteTaskAsync }
+                _removeTasktAsync = { this._removeTasktAsync }
             />
         ));
 
         console.log(`showTasks - `, showTasks);
+        // ToDo Спросить у Андрейя, почему ререндится страница, при вводе символов в input новой задачи.
 
         return (
             <section className = { Styles.scheduler }>
@@ -135,7 +168,7 @@ export default class Scheduler extends Component {
                         </form>
                         <div>
                             {/*<Task />*/}
-                            <ul><div>{showTasks}</div></ul>
+                            <ul><n>{showTasks}</n></ul>
                         </div>
 
                     </section>
