@@ -4,18 +4,18 @@ import { string, func } from "prop-types";
 
 // Instruments
 import Styles from './styles.m.css';
+import Checkbox from '../../theme/assets/Checkbox';
 import Star from '../../theme/assets/Star';
-// import Edit from '../../theme/assets/Edit';
 import Remove from '../../theme/assets/Remove';
+// import Edit from '../../theme/assets/Edit';
 
 export default class Task extends PureComponent {
     static propTypes = {
-        _favoriteTask: func.isRequired,
-        _removeTasktAsync:  func.isRequired,
+        _updateSateAndDBAsync: func.isRequired,
+        _completeTaskAsync:    func.isRequired,
+        _favoriteTaskAsync:    func.isRequired,
+        _removeTasktAsync:     func.isRequired,
     };
-
-    //     uneditable: true,
-    //
 
     _getTaskShape = ({
         id = this.props.id,
@@ -29,31 +29,63 @@ export default class Task extends PureComponent {
         message,
     });
 
+    _getComplete = () => {
+        const {
+            completed,
+        } = this.props;
+
+        console.log(`completed`, completed);
+
+        return (
+            <withSvg
+                className = { Styles._toggleTaskCompletedState }
+                onClick = { this._completeTask }>
+                <Checkbox
+                    checked = { completed }
+                    color1 = { '#3B8EF3' }
+                    color2 = { '#FFF' }
+                />
+
+            </withSvg>
+        );
+    };
+
+    _completeTask = () => {
+        // console.log(`Click Complete`);
+        // const { _completeTaskAsync, id } = this.props;
+        // _completeTaskAsync(id, 'completed', 'Text' );
+        const { _updateSateAndDBAsync, id } = this.props;
+
+        _updateSateAndDBAsync(id, 'completed');
+    };
+
     _getFavorite = () => {
         const {
             favorite,
         } = this.props;
 
-        // console.log(`Favorite - `, favorite);
-        // console.log(`this.props`, this.props);
 
         return (
-            <span
+            <div
                 className = { Styles.toggleTaskFavoriteState }
                 onClick = { this._favoriteTask }>
                 <Star
-                    checked = {favorite}
-                    color1 = {'#3B8EF3'}
+                    checked = { favorite }
+                    color1 = { '#3B8EF3' }
+                    color2 = { '#000' }
                 />
-                {/*{favorite?<Star />:null}*/}
-            </span>
+
+            </div>
         );
     };
     _favoriteTask = () => {
         // console.log(`Click Favorite`);
-        const { _favoriteTask, id } = this.props;
+        // const { _favoriteTaskAsync, id } = this.props;
+        // _favoriteTaskAsync(id);
+        const { _updateSateAndDBAsync, id } = this.props;
 
-        _favoriteTask(id);
+        _updateSateAndDBAsync(id, 'favorite');
+
     };
     _getRemoveTask = () => {
         return (
@@ -75,9 +107,9 @@ export default class Task extends PureComponent {
     render () {
         const {
             message,
-            completed,
             id,
         } = this.props;
+        const complete = this._getComplete();
         const favorite = this._getFavorite();
         const removeTask = this._getRemoveTask();
 
@@ -87,6 +119,7 @@ export default class Task extends PureComponent {
         // return <li className = { Styles.task }>Задача: стартовая точка</li>;
         return (<li className = { Styles.task }>
             <div className = { Styles.content }>
+                {complete}
                 <div className = { Styles.toggleTaskCompletedState } />
                 <input
                 // disabled = { this.taskState.uneditable }

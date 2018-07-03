@@ -134,14 +134,31 @@ export default class Scheduler extends Component {
             tasks: tasks.map((task) => task.id === id ? updTask : task),
         }));
     };
-
+// Потом убить
     _updateSateAndDB = (updTask) => {
         this._updateSateTask(updTask);
         this._updateDBTaskAsync(updTask);
         // Масло масляное, но мне кажется так выглядит более целсно. Дергаешь себе только одну функцию. ;)
     };
 
-    _favoriteTask = (id) => {
+    /**
+     * _updateSateAndDBAsync  -  функция для изменения параметров Task и ианесения их в State и DB.
+     * @author Adisey.
+     * @param {string} id сообщения для изменения
+     * @param {string} field Поле для изменения (favorite, completed, message, и др.)
+     * @param {string} [textMessege] Значение зля текстового поля.( Для полей с булевыми значениями игнорируется.)
+     */
+    _updateSateAndDBAsync = (id, field, ...textMessege) => {
+        console.log(`Start _updateSateAndDBAsync`);
+        console.log('rest---------', textMessege);
+        const { tasks } = this.state;
+        const updTask = tasks.filter((task) => task.id === id)[0];
+        updTask[field]=!updTask[field];
+        this._updateSateTask(updTask);
+        this._updateDBTaskAsync(updTask);
+    };
+// Потом убить
+    _favoriteTaskAsync = (id) => {
         const { tasks } = this.state;
         const currentTask = tasks.filter((task) => task.id === id);
 
@@ -165,7 +182,49 @@ export default class Scheduler extends Component {
             console.error(`Task id ${id} not found.`);
         }
     };
+// Потом убить
 
+    _completeTaskAsync = (id, field, ...textMessegr) => {
+        console.log('---------', textMessegr);
+        console.log(`Start _compleateTaskAsync`);
+        const { tasks } = this.state;
+        const currentTask2 = tasks.filter((task) => task.id === id)[0];
+
+        currentTask2[field]=!currentTask2[field];
+
+        this._updateSateAndDB(currentTask2);
+
+
+    };
+// Потом убить
+
+    _completeTaskAsyncOLD = (id) => {
+
+        console.log(`Start _compleateTaskAsync`);
+        const { tasks } = this.state;
+        const currentTask = tasks.filter((task) => task.id === id);
+
+        if (currentTask.length) {
+            let {
+                message,
+                completed,
+                favorite,
+            } = currentTask[0];
+
+            completed = !completed;
+            const updTask = {
+                id,
+                message,
+                completed,
+                favorite,
+            };
+
+            this._updateSateAndDB(updTask);
+        } else {
+            console.error(`Task id ${id} not found.`);
+        }
+
+    };
 
     render () {
         // console.log('Render State -', this.state);
@@ -177,7 +236,9 @@ export default class Scheduler extends Component {
             <Task
                 key = { task.id }
                 { ...task }
-                _favoriteTask = { this._favoriteTask }
+                _updateSateAndDBAsync = { this._updateSateAndDBAsync}
+                _completeTaskAsync = { this._completeTaskAsync }
+                _favoriteTaskAsync = { this._favoriteTaskAsync }
                 _removeTasktAsync = { this._removeTasktAsync }
             />
         ));
