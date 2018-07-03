@@ -12,8 +12,6 @@ import Remove from '../../theme/assets/Remove';
 export default class Task extends PureComponent {
     static propTypes = {
         _updateSateAndDBAsync: func.isRequired,
-        _completeTaskAsync:    func.isRequired,
-        _favoriteTaskAsync:    func.isRequired,
         _removeTasktAsync:     func.isRequired,
     };
 
@@ -51,9 +49,6 @@ export default class Task extends PureComponent {
     };
 
     _completeTask = () => {
-        // console.log(`Click Complete`);
-        // const { _completeTaskAsync, id } = this.props;
-        // _completeTaskAsync(id, 'completed', 'Text' );
         const { _updateSateAndDBAsync, id } = this.props;
 
         _updateSateAndDBAsync(id, 'completed');
@@ -79,9 +74,6 @@ export default class Task extends PureComponent {
         );
     };
     _favoriteTask = () => {
-        // console.log(`Click Favorite`);
-        // const { _favoriteTaskAsync, id } = this.props;
-        // _favoriteTaskAsync(id);
         const { _updateSateAndDBAsync, id } = this.props;
 
         _updateSateAndDBAsync(id, 'favorite');
