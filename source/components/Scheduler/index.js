@@ -182,19 +182,13 @@ export default class Scheduler extends Component {
         );
     };
     _runCompleteAll = () => {
-        console.log(`Click _runCompleteAll`);
-        const {
-            tasks,
-        } = this.state;
-        const updTasks = tasks.filter((task) => task.completed === false);
-
-        updTasks.forEach(
-            (updTask) => {
-                this._updateSateAndDBAsync(updTask.id, 'completed');
-            }
-        );
+        this.state.tasks.filter((task) => task.completed === false).
+            forEach(
+                (updTask) => {
+                    this._updateSateAndDBAsync(updTask.id, 'completed');
+                }
+            );
     };
-
 
     render () {
         // console.log('Render State -', this.state);
@@ -210,7 +204,6 @@ export default class Scheduler extends Component {
             />
         ));
 
-        console.log(`showTasks ---------------------`, showTasks);
         const CompleteAll = this._getCompleteAll();
 
         console.log(`CompleteAll`, CompleteAll);
@@ -256,4 +249,3 @@ export default class Scheduler extends Component {
 // ToDo 2. Filter
 // ToDo 3. Sort
 // ToDo 4. Test
-// ToDo 5. CampleadeAll
