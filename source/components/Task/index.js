@@ -52,6 +52,9 @@ export default class Task extends PureComponent {
         const { _updateSateAndDBAsync, id } = this.props;
 
         _updateSateAndDBAsync(id, 'completed');
+
+        // Заготовка для отправки сообщений.
+        // _updateSateAndDBAsync(id, 'message', 'Спать');
     };
 
     _getFavorite = () => {

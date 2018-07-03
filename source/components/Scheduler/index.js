@@ -135,12 +135,14 @@ export default class Scheduler extends Component {
      * @param {string} [textMessege] Значение зля текстового поля.( Для полей с булевыми значениями игнорируется.)
      */
     _updateSateAndDBAsync = (id, field, ...textMessege) => {
-        console.log(`Start _updateSateAndDBAsync`);
-        console.log('rest---------', textMessege);
+        if (field === 'message' && !textMessege.length) {
+            console.error(`При передаче поля вторым параметром "message", обязательно третим параметром передавать текст сообщения !!!`);
+            return;
+        }
         const { tasks } = this.state;
         const updTask = tasks.filter((task) => task.id === id)[0];
 
-        updTask[field]=!updTask[field];
+        updTask[field]= field !== 'message'?!updTask[field]:textMessege[0];
         this._updateSateTask(updTask);
         this._updateDBTaskAsync(updTask);
     };
