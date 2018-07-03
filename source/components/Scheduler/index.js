@@ -6,12 +6,15 @@ import Styles from './styles.m.css';
 import { api } from '../../REST/api';
 import Spinner from '../Spinner';
 import Task from '../Task';
+import Checkbox from '../../theme/assets/Checkbox';
+
 
 export default class Scheduler extends Component {
     state = {
-        tasks:      [],
-        message:    '',
-        isSpinning: false,
+        tasks:       [],
+        message:     '',
+        completeAll: false,
+        isSpinning:  false,
     };
 
     componentDidMount () {
@@ -29,6 +32,8 @@ export default class Scheduler extends Component {
             this.setState({
                 tasks,
             });
+
+            this.setState({ completeAll: !tasks.filter((task) => task.completed === false).length });
 
         } catch ({ message }) {
             console.error(message);
@@ -125,6 +130,10 @@ export default class Scheduler extends Component {
         this.setState(({ tasks }) => ({
             tasks: tasks.map((task) => task.id === id ? updTask : task),
         }));
+        const { tasks } = this.state;
+
+        this.setState({ completeAll: !tasks.filter((task) => task.completed === false).length });
+
     };
 
     /**
@@ -152,12 +161,46 @@ export default class Scheduler extends Component {
         this._updateDBTaskAsync(updTask);
     };
 
+    _getCompleteAll = () => {
+        const {
+            completeAll,
+        } = this.state;
+
+        console.log(`completeAll`, completeAll);
+
+        return (
+            <withSvg>
+                <div>
+                    <Checkbox
+                        checked = { completeAll }
+                        color1 = { '#3B8EF3' }
+                        color2 = { '#FFF' }
+                        onClick = { this._runCompleteAll }
+                    />
+                </div>
+            </withSvg>
+        );
+    };
+    _runCompleteAll = () => {
+        console.log(`Click _runCompleteAll`);
+        const {
+            tasks,
+        } = this.state;
+        const updTasks = tasks.filter((task) => task.completed === false);
+
+        updTasks.forEach(
+            (updTask) => {
+                this._updateSateAndDBAsync(updTask.id, 'completed');
+            }
+        );
+    };
+
+
     render () {
         // console.log('Render State -', this.state);
-        const { tasks: userTasks, isSpinning, message } = this.state;
-
         // console.log('Render isSpinning - ', isSpinning);
         // console.log('Render message - ', message);
+        const { tasks: userTasks, isSpinning, message } = this.state;
         const showTasks = userTasks.map((task) => (
             <Task
                 key = { task.id }
@@ -167,8 +210,13 @@ export default class Scheduler extends Component {
             />
         ));
 
-            // console.log(`showTasks - `, showTasks);
-            // console.log('this.state', this.state);
+        console.log(`showTasks ---------------------`, showTasks);
+        const CompleteAll = this._getCompleteAll();
+
+        console.log(`CompleteAll`, CompleteAll);
+
+        // console.log(`showTasks - `, showTasks);
+        // console.log('this.state', this.state);
         return (
             <section className = { Styles.scheduler }>
                 <main>
@@ -190,11 +238,14 @@ export default class Scheduler extends Component {
                             <button type = 'submit' >Добавить задачу</button>
                         </form>
                         <div>
-                            {/*<Task />*/}
                             <ul><n>{showTasks}</n></ul>
                         </div>
 
                     </section>
+                    <footer>
+                        {CompleteAll}
+                        <span className = { Styles.completeAllTasks }>Все задачи выполнены</span>
+                    </footer>
 
                 </main>
             </section>
@@ -205,3 +256,4 @@ export default class Scheduler extends Component {
 // ToDo 2. Filter
 // ToDo 3. Sort
 // ToDo 4. Test
+// ToDo 5. CampleadeAll

@@ -32,7 +32,7 @@ export default class Task extends PureComponent {
             completed,
         } = this.props;
 
-        console.log(`completed`, completed);
+        // console.log(`completed`, completed);
 
         return (
             <withSvg
@@ -64,7 +64,7 @@ export default class Task extends PureComponent {
 
 
         return (
-            <div
+            <withSvg
                 className = { Styles.toggleTaskFavoriteState }
                 onClick = { this._favoriteTask }>
                 <Star
@@ -73,7 +73,7 @@ export default class Task extends PureComponent {
                     color2 = { '#000' }
                 />
 
-            </div>
+            </withSvg>
         );
     };
     _favoriteTask = () => {
