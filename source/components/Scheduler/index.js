@@ -135,8 +135,13 @@ export default class Scheduler extends Component {
      * @param {string} [textMessege] Значение зля текстового поля.( Для полей с булевыми значениями игнорируется.)
      */
     _updateSateAndDBAsync = (id, field, ...textMessege) => {
-        if (field === 'message' && !textMessege.length) {
+        if (!(['favorite', 'completed', 'message'].indexOf(field)+1)) {
+            console.error(`Принимаются только обновления для полей  "favorite", "completed", "message" !!!`);
+
+            return;
+        } else if (field === 'message' && !textMessege.length) {
             console.error(`При передаче поля вторым параметром "message", обязательно третим параметром передавать текст сообщения !!!`);
+
             return;
         }
         const { tasks } = this.state;
@@ -196,3 +201,7 @@ export default class Scheduler extends Component {
         );
     }
 }
+// ToDo 1. Edit
+// ToDo 2. Filter
+// ToDo 3. Sort
+// ToDo 4. Test
