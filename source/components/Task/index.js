@@ -7,7 +7,7 @@ import Styles from './styles.m.css';
 import Checkbox from '../../theme/assets/Checkbox';
 import Star from '../../theme/assets/Star';
 import Remove from '../../theme/assets/Remove';
-// import Edit from '../../theme/assets/Edit';
+import Edit from '../../theme/assets/Edit';
 
 export default class Task extends PureComponent {
     static propTypes = {
@@ -99,25 +99,56 @@ export default class Task extends PureComponent {
         _removeTasktAsync(id);
     };
 
+
+    _getEditTask = () => {
+        const { edited } = this.props;
+
+
+        return (
+            <withSvg
+                className = { Styles.updateTaskMessageOnClick }
+                onClick = { this._editTask }
+                checked = { edited }
+                color1 = { '#3B8EF3' }
+                color2 = { '#000' }>
+                <Edit />
+            </withSvg>
+        );
+    };
+
+    _editTask = () => {
+        const {
+            id,
+            edited,
+            _updateSateAndDBAsync } = this.props;
+        // console.log(`Click EditTask ${id}`);
+
+        _updateSateAndDBAsync(id, 'edited');
+
+    };
+
     render () {
         const {
+            id,
             message,
+            edited,
         } = this.props;
-        const complete = this._getComplete();
-        const favorite = this._getFavorite();
-        const removeTask = this._getRemoveTask();
+        const Complete = this._getComplete();
+        const Favorite = this._getFavorite();
+        const EditB = this._getEditTask();
+        const RemoveTask = this._getRemoveTask();
 
-        // console.log(`Task id - `, id);
-        // console.log(`Task name - `, message);
-        // console.log('taskState.uneditable', this.taskState.uneditable);
-        // return <li className = { Styles.task }>Задача: стартовая точка</li>;
+        console.log(`Task id   - `, id);
+        console.log(`Task name - `, message);
+        console.log(`Task edited - `, edited);
+        console.log(`Task edited - `, edited? 1:0);
+
         return (<li className = { Styles.task }>
             <div className = { Styles.content }>
-                {complete}
+                {Complete}
                 <div className = { Styles.toggleTaskCompletedState } />
                 <input
-                // disabled = { this.taskState.uneditable }
-                    disabled = 'true'
+                    disabled = { !edited }
                     maxLength = '50'
                     type = 'text'
                     value = { message }
@@ -125,10 +156,9 @@ export default class Task extends PureComponent {
 
             </div>
             <div className = { Styles.actions }>
-                {favorite}
-                {removeTask}
-                {/*<section className = { Styles.updateTaskMessageOnClick } />*/}
-                {/*<Edit />*/}
+                {Favorite}
+                {EditB}
+                {RemoveTask}
             </div>
         </li>);
     }

@@ -7,19 +7,19 @@ import { api } from '../../REST/api';
 import Spinner from '../Spinner';
 import Task from '../Task';
 import Checkbox from '../../theme/assets/Checkbox';
+// import { func } from "prop-types";
 
 
 export default class Scheduler extends Component {
     state = {
-        tasks:       [],
-        message:     '',
-        completeAll: false,
-        isSpinning:  false,
+        tasks:        [],
+        message:      '',
+        completeAll:  false,
+        isSpinning:   false,
     };
 
     componentDidMount () {
         this._fetchTasksAsync();
-
     }
 
     _fetchTasksAsync = async () => {
@@ -43,22 +43,22 @@ export default class Scheduler extends Component {
         }
     };
 
-    _createTasksAsync = async (message) => {
-        // console.log(`_createTasksAsync`);
-        // console.log(`_createTasksAsync message`, message);
-        try {
-            this._setTasksFetchingState(true);
-            const tasks = await api.createTasks(message);
+       _createTasksAsync = async (message) => {
+           // console.log(`_createTasksAsync`);
+           // console.log(`_createTasksAsync message`, message);
+           try {
+               this._setTasksFetchingState(true);
+               const tasks = await api.createTasks(message);
 
-            this.setState((prevState) => ({
-                tasks: [tasks, ...prevState.tasks],
-            }));
-        } catch ({ errorMessage }) {
-            console.error(errorMessage);
-        } finally {
-            this._setTasksFetchingState(false);
-        }
-    };
+               this.setState((prevState) => ({
+                   tasks: [tasks, ...prevState.tasks],
+               }));
+           } catch ({ errorMessage }) {
+               console.error(errorMessage);
+           } finally {
+               this._setTasksFetchingState(false);
+           }
+       };
     _handleFormSubmit = (e) => {
         e.preventDefault();
         // console.log(`handleFormSubmit`);
@@ -144,8 +144,8 @@ export default class Scheduler extends Component {
      * @returns {null} Функция ничего не возвращает.
      */
     _updateSateAndDBAsync = (id, field, ...textMessege) => {
-        if (!(['favorite', 'completed', 'message'].indexOf(field)+1)) {
-            console.error(`Принимаются только обновления для полей  "favorite", "completed", "message" !!!`);
+        if (!(['edited', 'favorite', 'completed', 'message'].indexOf(field)+1)) {
+            console.error(`Принимаются только обновления для полей  "favorite", "completed", "message", "edited" !!!`);
 
             return;
         } else if (field === 'message' && !textMessege.length) {
@@ -165,8 +165,6 @@ export default class Scheduler extends Component {
         const {
             completeAll,
         } = this.state;
-
-        console.log(`completeAll`, completeAll);
 
         return (
             <withSvg>
@@ -221,8 +219,6 @@ _compareTwoTask = (firstTask, secondTask) =>
         ));
 
         const CompleteAll = this._getCompleteAll();
-
-        console.log(`CompleteAll`, CompleteAll);
 
         // console.log(`showTasks - `, showTasks);
         // console.log('this.state', this.state);
