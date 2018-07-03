@@ -32,8 +32,9 @@ export default class Scheduler extends Component {
             this.setState({
                 tasks,
             });
+            this._sortTaskState();
 
-            this.setState({ completeAll: !tasks.filter((task) => task.completed === false).length });
+            this._chekCompleteAll();
 
         } catch ({ message }) {
             console.error(message);
@@ -78,9 +79,6 @@ export default class Scheduler extends Component {
         if (!message) {
             return null;
         }
-
-        // TODO Кажется эта строка тут не нужна!
-        // const { _createTasksAsync } = this.props;
 
         this._createTasksAsync(message);
         this.setState({ message: "" });
@@ -130,9 +128,10 @@ export default class Scheduler extends Component {
         this.setState(({ tasks }) => ({
             tasks: tasks.map((task) => task.id === id ? updTask : task),
         }));
-        const { tasks } = this.state;
 
-        this.setState({ completeAll: !tasks.filter((task) => task.completed === false).length });
+        this._sortTaskState();
+
+        this._chekCompleteAll();
 
     };
 
@@ -142,6 +141,7 @@ export default class Scheduler extends Component {
      * @param {string} id сообщения для изменения
      * @param {string} field Поле для изменения (favorite, completed, message, и др.)
      * @param {string} [textMessege] Значение зля текстового поля.( Для полей с булевыми значениями игнорируется.)
+     * @returns {null} Функция ничего не возвращает.
      */
     _updateSateAndDBAsync = (id, field, ...textMessege) => {
         if (!(['favorite', 'completed', 'message'].indexOf(field)+1)) {
@@ -188,7 +188,23 @@ export default class Scheduler extends Component {
                     this._updateSateAndDBAsync(updTask.id, 'completed');
                 }
             );
+
     };
+
+    _chekCompleteAll = () =>
+        this.setState({ completeAll: !this.state.tasks.filter((task) => task.completed === false).length });
+
+
+_compareTwoTask = (firstTask, secondTask) =>
+    firstTask.completed*10+!firstTask.favorite -(secondTask.completed*10+!secondTask.favorite);
+
+    _sortTaskState = () =>
+        this.setState(({ tasks }) => ({
+            tasks: tasks.sort(
+                this._compareTwoTask
+            ),
+        }));
+
 
     render () {
         // console.log('Render State -', this.state);
@@ -247,5 +263,5 @@ export default class Scheduler extends Component {
 }
 // ToDo 1. Edit
 // ToDo 2. Filter
-// ToDo 3. Sort
 // ToDo 4. Test
+// ToDo 5. Красота

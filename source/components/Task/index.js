@@ -1,6 +1,6 @@
 // Core
 import React, { PureComponent } from 'react';
-import { string, func } from "prop-types";
+import { func } from "prop-types";
 
 // Instruments
 import Styles from './styles.m.css';
@@ -11,8 +11,8 @@ import Remove from '../../theme/assets/Remove';
 
 export default class Task extends PureComponent {
     static propTypes = {
-        _updateSateAndDBAsync: func.isRequired,
         _removeTasktAsync:     func.isRequired,
+        _updateSateAndDBAsync: func.isRequired,
     };
 
     _getTaskShape = ({
@@ -102,7 +102,6 @@ export default class Task extends PureComponent {
     render () {
         const {
             message,
-            id,
         } = this.props;
         const complete = this._getComplete();
         const favorite = this._getFavorite();
