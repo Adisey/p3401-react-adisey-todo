@@ -12,10 +12,9 @@ import Checkbox from '../../theme/assets/Checkbox';
 
 export default class Scheduler extends Component {
     state = {
-        tasks:           [],
-        message:         '',
         completeAll:     false,
         inSetup:         'Ниже Стейты которые были в тестах ;)',
+        tasks:           [],
         newTaskMessage:  '', // У меня был message
         tasksFilter:     '', // У меня был filter
         isTasksFetching: false, // У меня был isSpinning
@@ -37,17 +36,17 @@ export default class Scheduler extends Component {
 
             this._chekCompleteAll();
 
-        } catch ({ message }) {
-            console.error(message);
+        } catch ({ messageError }) {
+            console.error(messageError);
         } finally {
             this._setTasksFetchingState(false);
         }
     };
 
-       _createTaskAsync = async (message) => {
+       _createTaskAsync = async (newTaskMessage) => {
            try {
                this._setTasksFetchingState(true);
-               const tasks = await api.createTask(message);
+               const tasks = await api.createTask(newTaskMessage);
 
                this.setState((prevState) => ({
                    tasks: [tasks, ...prevState.tasks],
@@ -67,16 +66,16 @@ export default class Scheduler extends Component {
     _checkInputNewTask = (e) => {
         const { value } = e.target;
 
-        this.setState({ message: value });
+        this.setState({ newTaskMessage: value });
     };
      _submitTask = () => {
-         const { message } = this.state;
+         const { newTaskMessage } = this.state;
 
-         if (!message) {
+         if (!newTaskMessage) {
              return null;
          }
-         this._createTaskAsync(message);
-         this.setState({ message: "" });
+         this._createTaskAsync(newTaskMessage);
+         this.setState({ newTaskMessage: "" });
 
      };
     _setTasksFetchingState = (isTasksFetching) => {
@@ -214,15 +213,10 @@ export default class Scheduler extends Component {
     };
 
     _findFieldOnKeyDown = (e) => {
-        console.log(` Press Key ++++++++++++++++++`, e.key);
         if (e.key === "Escape" || e.keyCode === 27|| e.which === 27) {
-            console.log(` Press Esc++++++++++++++++++`);
             this.setState({ tasksFilter: '' });
-            // this.input.value = '';
         }
-        if (e.key === "Enter") {
-            console.log(` Press Enter++++++++++++++++++`);
-        }
+        // if (e.key === "Enter") {}
     };
 
     _checkInputFilter = (e) => {
@@ -233,7 +227,7 @@ export default class Scheduler extends Component {
 
 
     render () {
-        const { isTasksFetching, message, tasksFilter } = this.state;
+        const { isTasksFetching, newTaskMessage, tasksFilter } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
 
@@ -258,7 +252,7 @@ export default class Scheduler extends Component {
                                 maxLength = '50'
                                 placeholder = 'Описaние моей новой задачи'
                                 type = 'text'
-                                value = { message }
+                                value = { newTaskMessage }
                                 onChange = { this._checkInputNewTask }
                                 onKeyPress = { this._submitTaskOnEnter }
                             />
