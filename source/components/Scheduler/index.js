@@ -12,15 +12,14 @@ import Checkbox from '../../theme/assets/Checkbox';
 
 export default class Scheduler extends Component {
     state = {
-        filter:      '',
-        tasks:       [],
-        message:     '',
-        completeAll: false,
-        inSetup: 'Ниже Стейты которые были в тестах ;)',
+        filter:          '',
+        tasks:           [],
+        message:         '',
+        completeAll:     false,
+        inSetup:         'Ниже Стейты которые были в тестах ;)',
         newTaskMessage:  '', // У меня был message
-        tasksFilter:     '',  // У меня был filter
+        tasksFilter:     '', // У меня был filter
         isTasksFetching: false, // У меня был isSpinning
-
     };
 
     componentDidMount () {
