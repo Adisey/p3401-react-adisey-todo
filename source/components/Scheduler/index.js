@@ -12,7 +12,6 @@ import Checkbox from '../../theme/assets/Checkbox';
 
 export default class Scheduler extends Component {
     state = {
-        filter:          '',
         tasks:           [],
         message:         '',
         completeAll:     false,
@@ -198,11 +197,11 @@ export default class Scheduler extends Component {
         }));
 
     _showTasks = () => {
-        const { tasks: allTasks, filter } = this.state;
+        const { tasks: allTasks, tasksFilter } = this.state;
 
 
         return (
-            allTasks.filter((task) => task.message.indexOf(filter)+1).map((task) => (
+            allTasks.filter((task) => task.message.toUpperCase().indexOf(tasksFilter.toUpperCase())+1).map((task) => (
                 <Task
                     key = { task.id }
                     { ...task }
@@ -218,7 +217,7 @@ export default class Scheduler extends Component {
         console.log(` Press Key ++++++++++++++++++`, e.key);
         if (e.key === "Escape" || e.keyCode === 27|| e.which === 27) {
             console.log(` Press Esc++++++++++++++++++`);
-            this.setState({ filter: '' });
+            this.setState({ tasksFilter: '' });
             // this.input.value = '';
         }
         if (e.key === "Enter") {
@@ -229,12 +228,12 @@ export default class Scheduler extends Component {
     _checkInputFilter = (e) => {
         const { value } = e.target;
 
-        this.setState({ filter: value });
+        this.setState({ tasksFilter: value });
     };
 
 
     render () {
-        const { isTasksFetching, message, filter } = this.state;
+        const { isTasksFetching, message, tasksFilter } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
 
@@ -248,7 +247,7 @@ export default class Scheduler extends Component {
                         <input
                             placeholder = 'Поиск'
                             type = 'searh'
-                            value = { filter }
+                            value = { tasksFilter }
                             onChange = { this._checkInputFilter }
                             onKeyDown = { this._findFieldOnKeyDown }
                         />
