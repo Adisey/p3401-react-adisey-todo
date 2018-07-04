@@ -11,7 +11,7 @@ import Edit from '../../theme/assets/Edit';
 
 export default class Task extends PureComponent {
     static propTypes = {
-        _removeTasktAsync:     func.isRequired,
+        _removeTaskAsync:      func.isRequired,
         _updateSateAndDBAsync: func.isRequired,
     };
 
@@ -33,16 +33,13 @@ export default class Task extends PureComponent {
         } = this.props;
 
         return (
-            <withSvg
+            <Checkbox
+                checked = { completed }
                 className = { Styles._toggleTaskCompletedState }
-                onClick = { this._completeTask }>
-                <Checkbox
-                    checked = { completed }
-                    color1 = { '#3B8EF3' }
-                    color2 = { '#FFF' }
-                />
-
-            </withSvg>
+                color1 = { '#3B8EF3' }
+                color2 = { '#FFF' }
+                onClick = { this._completeTask }
+            />
         );
     };
 
@@ -59,7 +56,7 @@ export default class Task extends PureComponent {
 
 
         return (
-            <withSvg
+            <div
                 className = { Styles.toggleTaskFavoriteState }
                 onClick = { this._favoriteTask }>
                 <Star
@@ -68,7 +65,7 @@ export default class Task extends PureComponent {
                     color2 = { '#000' }
                 />
 
-            </withSvg>
+            </div>
         );
     };
     _favoriteTask = () => {
@@ -79,17 +76,18 @@ export default class Task extends PureComponent {
     };
     _getRemoveTask = () => {
         return (
-            <withSvg
-                onClick = { this._removeTask }>
-                <Remove />
-            </withSvg>
+            <Remove
+                onClick = { this._removeTask }
+                color1 = { '#3B8EF3' }
+                color2 = { '#000' }
+            />
         );
     };
 
     _removeTask = () => {
-        const { _removeTasktAsync, id } = this.props;
+        const { _removeTaskAsync, id } = this.props;
 
-        _removeTasktAsync(id);
+        _removeTaskAsync(id);
     };
 
 
@@ -98,15 +96,13 @@ export default class Task extends PureComponent {
 
 
         return (
-            <withSvg
+            <Edit
+                checked = { edited }
                 className = { Styles.updateTaskMessageOnClick }
-                onClick = { this._editTask } >
-                <Edit
-                    checked = { edited }
-                    color1 = { '#3B8EF3' }
-                    color2 = { '#000' }
-                />
-            </withSvg>
+                color1 = { '#3B8EF3' }
+                color2 = { '#000' }
+                onClick = { this._editTask }
+            />
         );
     };
 
@@ -114,7 +110,7 @@ export default class Task extends PureComponent {
         const {
             id,
             edited,
-            message,
+            // message,
             _updateSateAndDBAsync } = this.props;
 
         if (edited) {

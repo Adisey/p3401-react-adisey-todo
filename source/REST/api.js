@@ -17,7 +17,7 @@ export const api = {
 
         return tasks;
     },
-    async createTasks (taskName) {
+    async createTask (taskName) {
         const response = await fetch(MAIN_URL, {
             method:  "POST",
             headers: {
@@ -35,15 +35,15 @@ export const api = {
 
         return task;
     },
-    async putTasks (updateTask) {
-        console.log(`putTask received - `, updateTask);
+    async updateTask (updTask) {
+        console.log(`putTask received - `, updTask);
         const response = await fetch(MAIN_URL, {
             method:  "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization:  TOKEN,
             },
-            body: JSON.stringify( updateTask ),
+            body: JSON.stringify( updTask ),
         });
 
         if (response.status !== 200) {

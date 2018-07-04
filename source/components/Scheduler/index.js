@@ -42,10 +42,10 @@ export default class Scheduler extends Component {
         }
     };
 
-       _createTasksAsync = async (message) => {
+       _createTaskAsync = async (message) => {
            try {
                this._setTasksFetchingState(true);
-               const tasks = await api.createTasks(message);
+               const tasks = await api.createTask(message);
 
                this.setState((prevState) => ({
                    tasks: [tasks, ...prevState.tasks],
@@ -67,21 +67,16 @@ export default class Scheduler extends Component {
 
         this.setState({ message: value });
     };
-    _checkInputFilter = (e) => {
-        const { value } = e.target;
+     _submitTask = () => {
+         const { message } = this.state;
 
-        this.setState({ filter: value });
-    };
-    _submitTask = () => {
-        const { message } = this.state;
+         if (!message) {
+             return null;
+         }
+         this._createTaskAsync(message);
+         this.setState({ message: "" });
 
-        if (!message) {
-            return null;
-        }
-        this._createTasksAsync(message);
-        this.setState({ message: "" });
-
-    };
+     };
     _setTasksFetchingState = (isSpinning) => {
         this.setState({
             isSpinning,
@@ -95,7 +90,7 @@ export default class Scheduler extends Component {
         }
     };
 
-    _removeTasktAsync = async (id) => {
+    _removeTaskAsync = async (id) => {
         try {
             this._setTasksFetchingState(true);
             await api.removeTask(id);
@@ -111,7 +106,7 @@ export default class Scheduler extends Component {
     _updateDBTaskAsync = async (updTask) => {
         try {
             this._setTasksFetchingState(true);
-            await api.putTasks([updTask]);
+            await api.updateTask([updTask]);
         } catch (response) {
             console.error(response);
         } finally {
@@ -163,7 +158,7 @@ export default class Scheduler extends Component {
         } = this.state;
 
         return (
-            <withSvg>
+            <div>
                 <div>
                     <Checkbox
                         checked = { completeAll }
@@ -172,7 +167,7 @@ export default class Scheduler extends Component {
                         onClick = { this._runCompleteAll }
                     />
                 </div>
-            </withSvg>
+            </div>
         );
     };
     _runCompleteAll = () => {
@@ -208,7 +203,7 @@ export default class Scheduler extends Component {
                 <Task
                     key = { task.id }
                     { ...task }
-                    _removeTasktAsync = { this._removeTasktAsync }
+                    _removeTaskAsync = { this._removeTaskAsync }
                     _updateSateAndDBAsync = { this._updateSateAndDBAsync }
                 />
             ))
@@ -216,10 +211,31 @@ export default class Scheduler extends Component {
         );
     };
 
+    _findFieldOnKeyDown = (e) => {
+        console.log(` Press Key ++++++++++++++++++`, e.key);
+        if (e.key === "Escape" || e.keyCode === 27|| e.which === 27) {
+            console.log(` Press Esc++++++++++++++++++`);
+            this.setState({ filter: '' });
+            // this.input.value = '';
+        }
+        if (e.key === "Enter") {
+            console.log(` Press Enter++++++++++++++++++`);
+        }
+    };
+
+    _checkInputFilter = (e) => {
+        const { value } = e.target;
+
+        this.setState({ filter: value });
+    };
+
+
     render () {
         const { isSpinning, message, filter } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
+
+
         return (
             <section className = { Styles.scheduler }>
                 <main>
@@ -231,6 +247,7 @@ export default class Scheduler extends Component {
                             type = 'searh'
                             value = { filter }
                             onChange = { this._checkInputFilter }
+                            onKeyDown = { this._findFieldOnKeyDown }
                         />
                     </header>
                     <section>
