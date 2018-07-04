@@ -32,8 +32,6 @@ export default class Task extends PureComponent {
             completed,
         } = this.props;
 
-        // console.log(`completed`, completed);
-
         return (
             <withSvg
                 className = { Styles._toggleTaskCompletedState }
@@ -52,9 +50,6 @@ export default class Task extends PureComponent {
         const { _updateSateAndDBAsync, id } = this.props;
 
         _updateSateAndDBAsync(id, 'completed');
-        //
-        // Заготовка для отправки сообщений.
-        // _updateSateAndDBAsync(id, 'message', 'Спать');
     };
 
     _getFavorite = () => {
@@ -92,9 +87,7 @@ export default class Task extends PureComponent {
     };
 
     _removeTask = () => {
-        // console.log(`Click DELETE!!`);
         const { _removeTasktAsync, id } = this.props;
-        // console.log(`id`, id);
 
         _removeTasktAsync(id);
     };
@@ -123,12 +116,8 @@ export default class Task extends PureComponent {
             edited,
             message,
             _updateSateAndDBAsync } = this.props;
-        // console.log(`Click EditTask ${id} - ${edited}`);
-        // console.log("Input Value: ", this.input.value);
 
         if (edited) {
-            console.log("OLD Input Value: ", message);
-            console.log("NEW Input Value: ", this.input.value);
 
             _updateSateAndDBAsync(id, 'message', this.input.value);
         }
@@ -174,21 +163,16 @@ export default class Task extends PureComponent {
     };
 
     render () {
-        const {
-            id,
-            message,
-            edited,
-        } = this.props;
+        // const {
+        //     id,
+        //     message,
+        //     edited,
+        // } = this.props;
         const Complete = this._getComplete();
         const Input = this._getInputTask();
         const Favorite = this._getFavorite();
         const EditB = this._getEditTask();
         const RemoveTask = this._getRemoveTask();
-
-        console.log(`Task id   - `, id);
-        console.log(`Task message - `, message);
-        console.log(`Task edited - `, edited);
-        console.log(`Task edited - `, edited? 1:0);
 
         return (<li className = { Styles.task }>
             <div className = { Styles.content }>

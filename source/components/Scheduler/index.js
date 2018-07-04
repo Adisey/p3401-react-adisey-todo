@@ -24,11 +24,9 @@ export default class Scheduler extends Component {
     }
 
     _fetchTasksAsync = async () => {
-        // Получение тасков с сервера
         try {
             this._setTasksFetchingState(true);
             const tasks = await api.fetchTasks();
-            // console.log('tasks -', tasks);
 
             this.setState({
                 tasks,
@@ -45,8 +43,6 @@ export default class Scheduler extends Component {
     };
 
        _createTasksAsync = async (message) => {
-           // console.log(`_createTasksAsync`);
-           // console.log(`_createTasksAsync message`, message);
            try {
                this._setTasksFetchingState(true);
                const tasks = await api.createTasks(message);
@@ -64,12 +60,10 @@ export default class Scheduler extends Component {
        };
     _handleFormSubmit = (e) => {
         e.preventDefault();
-        // console.log(`handleFormSubmit`);
         this._submitTask();
     };
     _checkInputNewTask = (e) => {
         const { value } = e.target;
-        // console.log('message value - ', value);
 
         this.setState({ message: value });
     };
@@ -79,10 +73,7 @@ export default class Scheduler extends Component {
         this.setState({ filter: value });
     };
     _submitTask = () => {
-        // console.log(`_submitTask`);
-        // console.log('_submitCommen - State ', this.state);
         const { message } = this.state;
-        // console.log('Submit message - ', message);
 
         if (!message) {
             return null;
@@ -100,13 +91,11 @@ export default class Scheduler extends Component {
     _submitTaskOnEnter = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            // console.log("Enter");
             this._submitTask();
         }
     };
 
     _removeTasktAsync = async (id) => {
-        // console.log(`Start - _removeTasktAsync`);
         try {
             this._setTasksFetchingState(true);
             await api.removeTask(id);
@@ -117,7 +106,6 @@ export default class Scheduler extends Component {
             console.error(errorMessage);
         } finally {
             this._setTasksFetchingState(false);
-            // console.log(`End - _removeTasktAsync`);
         }
     };
     _updateDBTaskAsync = async (updTask) => {
@@ -201,8 +189,8 @@ export default class Scheduler extends Component {
         this.setState({ completeAll: !this.state.tasks.filter((task) => task.completed === false).length });
 
 
-_compareTwoTask = (firstTask, secondTask) =>
-    firstTask.completed*10+!firstTask.favorite -(secondTask.completed*10+!secondTask.favorite);
+    _compareTwoTask = (firstTask, secondTask) =>
+        firstTask.completed*10+!firstTask.favorite -(secondTask.completed*10+!secondTask.favorite);
 
     _sortTaskState = () =>
         this.setState(({ tasks }) => ({
@@ -210,10 +198,6 @@ _compareTwoTask = (firstTask, secondTask) =>
                 this._compareTwoTask
             ),
         }));
-
-    _includesFiltering = () => {
-        return 1===1;
-    };
 
     _showTasks = () => {
         const { tasks: allTasks, filter } = this.state;
@@ -233,15 +217,9 @@ _compareTwoTask = (firstTask, secondTask) =>
     };
 
     render () {
-        // console.log('Render State -', this.state);
-        // console.log('Render isSpinning - ', isSpinning);
-        // console.log('Render message - ', message);
         const { isSpinning, message, filter } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
-
-        // console.log(`showTasks - `, showTasks);
-        // console.log('this.state', this.state);
         return (
             <section className = { Styles.scheduler }>
                 <main>
