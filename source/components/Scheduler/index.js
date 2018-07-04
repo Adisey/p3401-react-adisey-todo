@@ -16,7 +16,6 @@ export default class Scheduler extends Component {
         tasks:       [],
         message:     '',
         completeAll: false,
-        isSpinning:  false,
         inSetup: 'Ниже Стейты которые были в тестах ;)',
         newTaskMessage:  '', // У меня был message
         tasksFilter:     '',  // У меня был filter
