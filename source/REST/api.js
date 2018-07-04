@@ -43,7 +43,7 @@ export const api = {
                 "Content-Type": "application/json",
                 Authorization:  TOKEN,
             },
-            body: JSON.stringify( updTask ),
+            body: JSON.stringify(updTask),
         });
 
         if (response.status !== 200) {
@@ -69,27 +69,3 @@ export const api = {
     },
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
