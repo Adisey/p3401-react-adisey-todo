@@ -7,7 +7,6 @@ import { api } from '../../REST/api';
 import Spinner from '../Spinner';
 import Task from '../Task';
 import Checkbox from '../../theme/assets/Checkbox';
-// import { func } from "prop-types";
 
 
 export default class Scheduler extends Component {
@@ -219,7 +218,7 @@ export default class Scheduler extends Component {
         // if (e.key === "Enter") {}
     };
 
-    _checkInputFilter = (e) => {
+    _updateTasksFilter = (e) => {
         const { value } = e.target;
 
         this.setState({ tasksFilter: value });
@@ -242,7 +241,7 @@ export default class Scheduler extends Component {
                             placeholder = 'Поиск'
                             type = 'searh'
                             value = { tasksFilter }
-                            onChange = { this._checkInputFilter }
+                            onChange = { this._updateTasksFilter }
                             onKeyDown = { this._findFieldOnKeyDown }
                         />
                     </header>
