@@ -273,4 +273,4 @@ export default class Scheduler extends Component {
     }
 }
 // ToDo 4. Test
-// ToDo 5. Красота и анимация
+// ToDo 5. Красота в кнопке фильтра и анимация везде.
