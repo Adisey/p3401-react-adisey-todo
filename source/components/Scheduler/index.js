@@ -12,6 +12,7 @@ import Checkbox from '../../theme/assets/Checkbox';
 
 export default class Scheduler extends Component {
     state = {
+        filter:      '',
         tasks:       [],
         message:     '',
         completeAll: false,
@@ -66,11 +67,16 @@ export default class Scheduler extends Component {
         // console.log(`handleFormSubmit`);
         this._submitTask();
     };
-    _updateTask = (e) => {
+    _checkInputNewTask = (e) => {
         const { value } = e.target;
         // console.log('message value - ', value);
 
         this.setState({ message: value });
+    };
+    _checkInputFilter = (e) => {
+        const { value } = e.target;
+
+        this.setState({ filter: value });
     };
     _submitTask = () => {
         // console.log(`_submitTask`);
@@ -205,11 +211,16 @@ _compareTwoTask = (firstTask, secondTask) =>
             ),
         }));
 
+    _includesFiltering = () => {
+        return 1===1;
+    };
+
     _showTasks = () => {
-        const { tasks: filterTasks } = this.state;
+        const { tasks: allTasks, filter } = this.state;
+
 
         return (
-            filterTasks.map((task) => (
+            allTasks.filter((task) => task.message.indexOf(filter)+1).map((task) => (
                 <Task
                     key = { task.id }
                     { ...task }
@@ -225,7 +236,7 @@ _compareTwoTask = (firstTask, secondTask) =>
         // console.log('Render State -', this.state);
         // console.log('Render isSpinning - ', isSpinning);
         // console.log('Render message - ', message);
-        const { isSpinning, message } = this.state;
+        const { isSpinning, message, filter } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
 
@@ -237,7 +248,12 @@ _compareTwoTask = (firstTask, secondTask) =>
                     <Spinner isSpinning = { isSpinning } />
                     <header>
                         <h1>Планировщик задач</h1>
-                        <input placeholder = 'Поиск' type = 'searh' value = '' />
+                        <input
+                            placeholder = 'Поиск'
+                            type = 'searh'
+                            value = { filter }
+                            onChange = { this._checkInputFilter }
+                        />
                     </header>
                     <section>
                         <form onSubmit = { this._handleFormSubmit }>
@@ -246,13 +262,13 @@ _compareTwoTask = (firstTask, secondTask) =>
                                 placeholder = 'Описaние моей новой задачи'
                                 type = 'text'
                                 value = { message }
-                                onChange = { this._updateTask }
+                                onChange = { this._checkInputNewTask }
                                 onKeyPress = { this._submitTaskOnEnter }
                             />
                             <button type = 'submit' >Добавить задачу</button>
                         </form>
                         <div>
-                            <ul><n>{_showTasks}</n></ul>
+                            <ul>{_showTasks}</ul>
                         </div>
 
                     </section>
@@ -266,7 +282,5 @@ _compareTwoTask = (firstTask, secondTask) =>
         );
     }
 }
-// ToDo 1. Edit
-// ToDo 2. Filter
 // ToDo 4. Test
-// ToDo 5. Красота
+// ToDo 5. Красота и анимация

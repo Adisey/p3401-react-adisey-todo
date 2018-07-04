@@ -84,10 +84,10 @@ export default class Task extends PureComponent {
     };
     _getRemoveTask = () => {
         return (
-            <span
+            <withSvg
                 onClick = { this._removeTask }>
                 <Remove />
-            </span>
+            </withSvg>
         );
     };
 

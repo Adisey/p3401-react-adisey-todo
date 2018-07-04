@@ -45,6 +45,7 @@
 
     & .actions {
         min-width: 100px;
+          display: flex;
 
         & .toggleTaskFavoriteState,
         & .updateTaskMessageOnClick {
