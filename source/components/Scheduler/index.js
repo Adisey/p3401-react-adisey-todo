@@ -12,10 +12,10 @@ import Checkbox from '../../theme/assets/Checkbox';
 
 export default class Scheduler extends Component {
     state = {
-        tasks:        [],
-        message:      '',
-        completeAll:  false,
-        isSpinning:   false,
+        tasks:       [],
+        message:     '',
+        completeAll: false,
+        isSpinning:  false,
     };
 
     componentDidMount () {
@@ -203,12 +203,28 @@ _compareTwoTask = (firstTask, secondTask) =>
             ),
         }));
 
+    _showTasks = () => {
+        const { tasks: filterTasks } = this.state;
+
+        return (
+            filterTasks.map((task) => (
+                <Task
+                    key = { task.id }
+                    { ...task }
+                    _removeTasktAsync = { this._removeTasktAsync }
+                    _updateSateAndDBAsync = { this._updateSateAndDBAsync }
+                />
+            ))
+
+        );
+    };
 
     render () {
         // console.log('Render State -', this.state);
         // console.log('Render isSpinning - ', isSpinning);
         // console.log('Render message - ', message);
         const { tasks: userTasks, isSpinning, message } = this.state;
+        const _showTasks = this._showTasks();
         const showTasks = userTasks.map((task) => (
             <Task
                 key = { task.id }
@@ -243,7 +259,7 @@ _compareTwoTask = (firstTask, secondTask) =>
                             <button type = 'submit' >Добавить задачу</button>
                         </form>
                         <div>
-                            <ul><n>{showTasks}</n></ul>
+                            <ul><n>{_showTasks}</n></ul>
                         </div>
 
                     </section>
