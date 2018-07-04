@@ -56,6 +56,8 @@ export default class Scheduler extends Component {
            } catch ({ errorMessage }) {
                console.error(errorMessage);
            } finally {
+               this._sortTaskState();
+               this._chekCompleteAll();
                this._setTasksFetchingState(false);
            }
        };
@@ -79,9 +81,9 @@ export default class Scheduler extends Component {
         if (!message) {
             return null;
         }
-
         this._createTasksAsync(message);
         this.setState({ message: "" });
+
     };
     _setTasksFetchingState = (isSpinning) => {
         this.setState({
@@ -223,17 +225,8 @@ _compareTwoTask = (firstTask, secondTask) =>
         // console.log('Render State -', this.state);
         // console.log('Render isSpinning - ', isSpinning);
         // console.log('Render message - ', message);
-        const { tasks: userTasks, isSpinning, message } = this.state;
+        const { isSpinning, message } = this.state;
         const _showTasks = this._showTasks();
-        const showTasks = userTasks.map((task) => (
-            <Task
-                key = { task.id }
-                { ...task }
-                _removeTasktAsync = { this._removeTasktAsync }
-                _updateSateAndDBAsync = { this._updateSateAndDBAsync }
-            />
-        ));
-
         const CompleteAll = this._getCompleteAll();
 
         // console.log(`showTasks - `, showTasks);
