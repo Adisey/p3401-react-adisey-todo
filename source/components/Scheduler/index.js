@@ -82,9 +82,9 @@ export default class Scheduler extends Component {
          this.setState({ message: "" });
 
      };
-    _setTasksFetchingState = (isSpinning) => {
+    _setTasksFetchingState = (isTasksFetching) => {
         this.setState({
-            isSpinning,
+            isTasksFetching,
         });
     };
 
@@ -236,7 +236,7 @@ export default class Scheduler extends Component {
 
 
     render () {
-        const { isSpinning, message, filter } = this.state;
+        const { isTasksFetching, message, filter } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
 
@@ -244,7 +244,7 @@ export default class Scheduler extends Component {
         return (
             <section className = { Styles.scheduler }>
                 <main>
-                    <Spinner isSpinning = { isSpinning } />
+                    <Spinner isTasksFetching = { isTasksFetching } />
                     <header>
                         <h1>Планировщик задач</h1>
                         <input
