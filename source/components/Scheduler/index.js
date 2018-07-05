@@ -42,6 +42,25 @@ export default class Scheduler extends Component {
         }
     };
 
+    _completeAllTasksAsync = async () => {
+        // Фековая функция исключительно для тестов, логика предусматривает другой алгоритм перевода
+        // всех задач в статус выполнено ;)
+        // В таком виде как есть можно использовать для обовления всех задач на сервере из стейта ;)
+        const {
+            tasks: updTasks,
+        } = this.state;
+
+        try {
+            this._setTasksFetchingState(true);
+            await api.completeAllTasks(updTasks);
+
+        } catch ({ messageError }) {
+            console.error(messageError);
+        } finally {
+            this._setTasksFetchingState(false);
+        }
+    };
+
        _createTaskAsync = async (newTaskMessage) => {
            try {
                this._setTasksFetchingState(true);
@@ -274,4 +293,3 @@ export default class Scheduler extends Component {
 }
 // ToDo 4. Test
 // ToDo 5. Красота в кнопке фильтра и анимация везде.
-
