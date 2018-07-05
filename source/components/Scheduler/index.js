@@ -75,18 +75,22 @@ export default class Scheduler extends Component {
     };
 
 
-    _createTaskAsync = async () => {
-        const { newTaskMessage } = this.state;
+    _createTaskAsync = async (newMessage) => {
+        let { newTaskMessage } = this.state;
         //// ToDo Спросить у Андрей почету из "_keyPressNewTaskMessage" работает всегда, и не ререндорится
         // страница, когда я прямон на кнопку повесил, работает через раз, постоянный реренденринг
         // ниже код, с которым проблем небыло ((((((
+
+        this._setTasksFetchingState(true);
+
+        // ToDo Специально для тестов, пока не знаю, как из инпута передавать параметром значение.
+        newTaskMessage = newMessage?newMessage:newTaskMessage;
 
         console.log(`newTaskMessage`, newTaskMessage);
         if (newTaskMessage) {
             console.log(`11111111111`);
             this._setTasksFetchingState(true);
             try {
-                this._setTasksFetchingState(true);
                 const newTasks = await api.createTask(newTaskMessage);
 
                 this.setState((prevState) => ({
@@ -104,6 +108,9 @@ export default class Scheduler extends Component {
             }
         } else {
             console.log(`newTaskMessage   Spase `, newTaskMessage);
+            this._setTasksFetchingState(false);
+
+            return null;
 
         }
         console.log(`+++++++++++++++++++`);
@@ -209,7 +216,7 @@ export default class Scheduler extends Component {
 
     _updateTask = () => {
         // Создал функцию, для чего она нужна в тестах пока не знаю.
-    }
+    };
 
     _getCompleteAll = () => {
         const {
@@ -269,13 +276,14 @@ export default class Scheduler extends Component {
 
 
     _showTasks = () => {
-        const { tasks: allTasks, tasksFilter } = this.state;
+        const { tasks, tasksFilter } = this.state;
+        // const { tasks, tasksFilter } = this.props;
 
 
         return (
             ///// !!!!!!!!!!!!!!!!!!!
 
-            allTasks.
+            tasks.
                 filter((task) => task.message.toUpperCase().indexOf(tasksFilter.toUpperCase())+1).
                 map((task) => (
                     <Task
@@ -325,9 +333,12 @@ export default class Scheduler extends Component {
         return (
             <section className = { Styles.scheduler }>
                 <main>
-                    <Spinner isTasksFetching = { isTasksFetching } />
+                    <Spinner
+                        isTasksFetching = { isTasksFetching }
+
+                    />
                     <header>
-                        <h1>Планировщик задач</h1>
+                        <h1 className = 'test'>Планировщик задач</h1>
                         <input
                             placeholder = 'Поиск'
                             type = 'search'
@@ -339,6 +350,7 @@ export default class Scheduler extends Component {
                     <section>
                         <form onSubmit = { this._createTaskAsync }>
                             <input
+                                className = 'createTask'
                                 maxLength = { 50 }
                                 placeholder = 'Описaние моей новой задачи'
                                 type = 'text'
@@ -347,6 +359,7 @@ export default class Scheduler extends Component {
                                 onKeyPress = { this._keyPressNewTaskMessage }
                             />
                             <button type = 'submit' >Добавить задачу</button>
+                            {/*<button>Добавить задачу</button>*/}
                         </form>
                         <div>
                             <ul>{_showTasks}</ul>
@@ -364,4 +377,4 @@ export default class Scheduler extends Component {
     }
 }
 // ToDo 4. Test
-// ToDo 5. Красота в кнопке фильтра и анимация везде.
+// ToDo 5. Красота и анимация везде.
