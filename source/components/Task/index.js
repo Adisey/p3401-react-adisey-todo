@@ -62,7 +62,7 @@ export default class Task extends PureComponent {
                 <Star
                     checked = { favorite }
                     color1 = { '#3B8EF3' }
-                    color2 = { '#000' }
+                    color2 = { '#000000' }
                 />
 
             </div>

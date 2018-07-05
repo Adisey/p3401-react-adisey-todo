@@ -81,7 +81,7 @@ export default class Scheduler extends Component {
         e.preventDefault();
         this._submitTask();
     };
-    _checkInputNewTask = (e) => {
+    _updateNewTaskMessage = (e) => {
         const { value } = e.target;
 
         this.setState({ newTaskMessage: value });
@@ -271,7 +271,7 @@ export default class Scheduler extends Component {
                                 placeholder = 'Описaние моей новой задачи'
                                 type = 'text'
                                 value = { newTaskMessage }
-                                onChange = { this._checkInputNewTask }
+                                onChange = { this._updateNewTaskMessage }
                                 onKeyPress = { this._submitTaskOnEnter }
                             />
                             <button type = 'submit' >Добавить задачу</button>
