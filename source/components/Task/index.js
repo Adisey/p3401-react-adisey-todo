@@ -56,16 +56,15 @@ export default class Task extends PureComponent {
 
 
         return (
-            <div
+            <Star
+                checked = { favorite }
                 className = { Styles.toggleTaskFavoriteState }
-                onClick = { this._favoriteTask }>
-                <Star
-                    checked = { favorite }
-                    color1 = { '#3B8EF3' }
-                    color2 = { '#000000' }
-                />
-
-            </div>
+                color1 = { '#3B8EF3' }
+                color2 = { '#000' }
+                hover = { false }
+                inlineBlock
+                onClick = { this._favoriteTask }
+            />
         );
     };
     _favoriteTask = () => {
@@ -77,8 +76,10 @@ export default class Task extends PureComponent {
     _getRemoveTask = () => {
         return (
             <Remove
+                checked = { false }
                 color1 = { '#3B8EF3' }
                 color2 = { '#000' }
+                inlineBlock
                 onClick = { this._removeTask }
             />
         );
@@ -132,7 +133,7 @@ export default class Task extends PureComponent {
                 <input
                     defaultValue = { message }
                     disabled = { !edited }
-                    maxLength = '50'
+                    maxLength = { 50 }
                     ref = { (input) => this.input = input }
                     type = 'text'
                     onKeyDown = { this._updateTaskMessageOnKeyDown }

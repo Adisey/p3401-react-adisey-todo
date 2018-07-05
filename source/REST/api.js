@@ -32,7 +32,6 @@ export const api = {
             throw new Error("Tasks Where not Create");
         }
         const { data: task } = await response.json();
-
         return task;
     },
     async updateTask (updTask) {

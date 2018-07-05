@@ -61,52 +61,88 @@ export default class Scheduler extends Component {
         }
     };
 
-       _createTaskAsync = async (newTaskMessage) => {
-           try {
-               this._setTasksFetchingState(true);
-               const tasks = await api.createTask(newTaskMessage);
-
-               this.setState((prevState) => ({
-                   tasks: [tasks, ...prevState.tasks],
-               }));
-           } catch ({ errorMessage }) {
-               console.error(errorMessage);
-           } finally {
-               this._sortTaskState();
-               this._getAllCompleted();
-               this._setTasksFetchingState(false);
-           }
-       };
-    _handleFormSubmit = (e) => {
-        e.preventDefault();
-        this._submitTask();
-    };
     _updateNewTaskMessage = (e) => {
         const { value } = e.target;
 
         this.setState({ newTaskMessage: value });
     };
-     _submitTask = () => {
-         const { newTaskMessage } = this.state;
 
-         if (!newTaskMessage) {
-             return null;
-         }
-         this._createTaskAsync(newTaskMessage);
-         this.setState({ newTaskMessage: "" });
+    _keyPressNewTaskMessage = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            this._createTaskAsync();
+        }
+    };
 
-     };
+
+    _createTaskAsync = async () => {
+        const { newTaskMessage } = this.state;
+        //// ToDo Спросить у Андрей почету из "_keyPressNewTaskMessage" работает всегда, и не ререндорится
+        // страница, когда я прямон на кнопку повесил, работает через раз, постоянный реренденринг
+        // ниже код, с которым проблем небыло ((((((
+
+        console.log(`newTaskMessage`, newTaskMessage);
+        if (newTaskMessage) {
+            console.log(`11111111111`);
+            this._setTasksFetchingState(true);
+            try {
+                this._setTasksFetchingState(true);
+                const newTasks = await api.createTask(newTaskMessage);
+
+                this.setState((prevState) => ({
+                    tasks: [newTasks, ...prevState.tasks],
+                }));
+
+            } catch ({ errorMessage }) {
+                console.error(errorMessage);
+                console.log(`---------------------------`);
+            } finally {
+                this._sortTaskState();
+                this._getAllCompleted();
+                this.setState({ newTaskMessage: "" });
+                this._setTasksFetchingState(false);
+            }
+        } else {
+            console.log(`newTaskMessage   Spase `, newTaskMessage);
+
+        }
+        console.log(`+++++++++++++++++++`);
+
+    };
+    //    _createTaskAsync = async (newTaskMessage) => {
+    //        try {
+    //            this._setTasksFetchingState(true);
+    //            const tasks = await api.createTask(newTaskMessage);
+    //
+    //            this.setState((prevState) => ({
+    //                tasks: [tasks, ...prevState.tasks],
+    //            }));
+    //        } catch ({ errorMessage }) {
+    //            console.error(errorMessage);
+    //        } finally {
+    //            this._sortTaskState();
+    //            this._getAllCompleted();
+    //            this._setTasksFetchingState(false);
+    //        }
+    //    };
+    // _handleFormSubmit = (e) => {
+    //     e.preventDefault();
+    //     this._submitTask();
+    // };
+    //  _submitTask = () => {
+    //      const { newTaskMessage } = this.state;
+    //
+    //      if (!newTaskMessage) {
+    //          return null;
+    //      }
+    //      this._createTaskAsync(newTaskMessage);
+    //      this.setState({ newTaskMessage: "" });
+    //
+    //  };
     _setTasksFetchingState = (isTasksFetching) => {
         this.setState({
             isTasksFetching,
         });
-    };
-
-    _submitTaskOnEnter = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            this._submitTask();
-        }
     };
 
     _removeTaskAsync = async (id) => {
@@ -171,6 +207,10 @@ export default class Scheduler extends Component {
         this._updateTaskAsync(updTask);
     };
 
+    _updateTask = () => {
+        // Создал функцию, для чего она нужна в тестах пока не знаю.
+    }
+
     _getCompleteAll = () => {
         const {
             completeAll,
@@ -227,6 +267,7 @@ export default class Scheduler extends Component {
             ),
         }));
 
+
     _showTasks = () => {
         const { tasks: allTasks, tasksFilter } = this.state;
 
@@ -247,25 +288,28 @@ export default class Scheduler extends Component {
 
         );
     };
-
-    _findFieldOnKeyDown = (e) => {
+    _keyDownTasksFilter = (e) => {
         if (e.key === "Escape" || e.keyCode === 27|| e.which === 27) {
+            console.log(`_keyDownTasksFilter-----Esc----`);
+            e.preventDefault();
             this.setState({ tasksFilter: '' });
+            // ToDo пока не понимаю, почему после обновления фильтра в стейт, не отрабатывает проверка на Комплит,
+            // по отыильтрованному, Заернул в таймаут, но нужно спросить у Андрея
+            setTimeout(() => {
+                this._getAllCompleted();
+            }, 300);
         }
-        // if (e.key === "Enter") {}
-        // ToDo пока не понимаю, почему после обновления фильтра в стейт, не отрабатывает проверка на Комплит,
-        // по отыильтрованному, Заернул в таймаут, но нужно спросить у Андрея
-        setTimeout(() => {
-            this._getAllCompleted();
-        }, 300);
+        // if (e.key === "Enter") {
+        //  e.preventDefault();
+        // }
     };
 
     _updateTasksFilter = (e) => {
         const { value } = e.target;
 
         this.setState({ tasksFilter: value });
-        // ToDo пока не понимаю, почему после обновления фильтра в стейт, не отрабатывает проверка на Комплит,
-        // по отыильтрованному, Заернул в таймаут, но нужно спросить у Андрея
+        // ToDo пока не понимаю, почему после передачи фильтра в стейт, не отрабатывает проверка на Комплит,
+        // по отфильтрованному, Заернул в таймаут, но нужно спросить у Андрея
         setTimeout(() => {
             this._getAllCompleted();
         }, 300);
@@ -273,7 +317,7 @@ export default class Scheduler extends Component {
 
 
     render () {
-        const { isTasksFetching, newTaskMessage, tasksFilter } = this.state;
+        const { isTasksFetching, newTaskMessage, tasksFilter, tasks } = this.state;
         const _showTasks = this._showTasks();
         const CompleteAll = this._getCompleteAll();
 
@@ -286,21 +330,21 @@ export default class Scheduler extends Component {
                         <h1>Планировщик задач</h1>
                         <input
                             placeholder = 'Поиск'
-                            type = 'searh'
+                            type = 'search'
                             value = { tasksFilter }
                             onChange = { this._updateTasksFilter }
-                            onKeyDown = { this._findFieldOnKeyDown }
+                            // onKeyDown = { this._keyDownTasksFilter }
                         />
                     </header>
                     <section>
-                        <form onSubmit = { this._handleFormSubmit }>
+                        <form onSubmit = { this._createTaskAsync }>
                             <input
-                                maxLength = '50'
+                                maxLength = { 50 }
                                 placeholder = 'Описaние моей новой задачи'
                                 type = 'text'
                                 value = { newTaskMessage }
                                 onChange = { this._updateNewTaskMessage }
-                                onKeyPress = { this._submitTaskOnEnter }
+                                onKeyPress = { this._keyPressNewTaskMessage }
                             />
                             <button type = 'submit' >Добавить задачу</button>
                         </form>
