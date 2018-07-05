@@ -190,7 +190,12 @@ export default class Scheduler extends Component {
         );
     };
     _runCompleteAll = () => {
-        this.state.tasks.filter((task) => task.completed === false).
+        ///// !!!!!!!!!!!!!!!!!!!
+        const { tasksFilter } = this.state;
+
+        this.state.tasks.
+            filter((task) => task.message.toUpperCase().indexOf(tasksFilter.toUpperCase())+1).
+            filter((task) => task.completed === false).
             forEach(
                 (updTask) => {
                     this._updateSateAndDBAsync(updTask.id, 'completed');
@@ -199,8 +204,17 @@ export default class Scheduler extends Component {
 
     };
 
-    _getAllCompleted = () =>
-        this.setState({ completeAll: !this.state.tasks.filter((task) => task.completed === false).length });
+    _getAllCompleted = () => {
+        ///// !!!!!!!!!!!!!!!!!!!
+        const { tasksFilter } = this.state;
+
+        this.setState({
+            completeAll: !this.state.tasks.
+                filter((task) => task.message.toUpperCase().indexOf(tasksFilter.toUpperCase()) + 1).
+                filter((task) => task.completed === false).length,
+        });
+        // console.log(`Check compleate! for filter - ${tasksFilter}`);
+    };
 
 
     _compareTwoTask = (firstTask, secondTask) =>
@@ -218,14 +232,18 @@ export default class Scheduler extends Component {
 
 
         return (
-            allTasks.filter((task) => task.message.toUpperCase().indexOf(tasksFilter.toUpperCase())+1).map((task) => (
-                <Task
-                    key = { task.id }
-                    { ...task }
-                    _removeTaskAsync = { this._removeTaskAsync }
-                    _updateSateAndDBAsync = { this._updateSateAndDBAsync }
-                />
-            ))
+            ///// !!!!!!!!!!!!!!!!!!!
+
+            allTasks.
+                filter((task) => task.message.toUpperCase().indexOf(tasksFilter.toUpperCase())+1).
+                map((task) => (
+                    <Task
+                        key = { task.id }
+                        { ...task }
+                        _removeTaskAsync = { this._removeTaskAsync }
+                        _updateSateAndDBAsync = { this._updateSateAndDBAsync }
+                    />
+                ))
 
         );
     };
@@ -235,12 +253,22 @@ export default class Scheduler extends Component {
             this.setState({ tasksFilter: '' });
         }
         // if (e.key === "Enter") {}
+        // ToDo пока не понимаю, почему после обновления фильтра в стейт, не отрабатывает проверка на Комплит,
+        // по отыильтрованному, Заернул в таймаут, но нужно спросить у Андрея
+        setTimeout(() => {
+            this._getAllCompleted();
+        }, 300);
     };
 
     _updateTasksFilter = (e) => {
         const { value } = e.target;
 
         this.setState({ tasksFilter: value });
+        // ToDo пока не понимаю, почему после обновления фильтра в стейт, не отрабатывает проверка на Комплит,
+        // по отыильтрованному, Заернул в таймаут, но нужно спросить у Андрея
+        setTimeout(() => {
+            this._getAllCompleted();
+        }, 300);
     };
 
 
@@ -293,4 +321,3 @@ export default class Scheduler extends Component {
 }
 // ToDo 4. Test
 // ToDo 5. Красота в кнопке фильтра и анимация везде.
-

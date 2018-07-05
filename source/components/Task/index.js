@@ -101,12 +101,12 @@ export default class Task extends PureComponent {
                 className = { Styles.updateTaskMessageOnClick }
                 color1 = { '#3B8EF3' }
                 color2 = { '#000' }
-                onClick = { this._editTask }
+                onClick = { this._setTaskEditingState }
             />
         );
     };
 
-    _editTask = () => {
+    _setTaskEditingState = () => {
         const {
             id,
             edited,
@@ -146,11 +146,11 @@ export default class Task extends PureComponent {
             const { message } = this.props;
 
             this.input.value = message;
-            this._editTask();
+            this._setTaskEditingState();
         }
         if (e.key === "Enter") {
             e.preventDefault();
-            this._editTask();
+            this._setTaskEditingState();
         }
     };
 
