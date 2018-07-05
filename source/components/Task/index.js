@@ -135,7 +135,7 @@ export default class Task extends PureComponent {
                     maxLength = '50'
                     ref = { (input) => this.input = input }
                     type = 'text'
-                    onKeyDown = { this._inputKeyDown }
+                    onKeyDown = { this._updateTaskMessageOnKeyDown }
                     onKeyPress = { this._inputKeyPress }
 
                 />
@@ -143,7 +143,7 @@ export default class Task extends PureComponent {
         );
     };
 
-    _inputKeyDown = (e) => {
+    _updateTaskMessageOnKeyDown = (e) => {
         if (e.key === "Escape" || e.keyCode === 27|| e.which === 27) {
             const { message } = this.props;
 
