@@ -33,7 +33,7 @@ export default class Scheduler extends Component {
             });
             this._sortTaskState();
 
-            this._chekCompleteAll();
+            this._getAllCompleted();
 
         } catch ({ messageError }) {
             console.error(messageError);
@@ -73,7 +73,7 @@ export default class Scheduler extends Component {
                console.error(errorMessage);
            } finally {
                this._sortTaskState();
-               this._chekCompleteAll();
+               this._getAllCompleted();
                this._setTasksFetchingState(false);
            }
        };
@@ -141,7 +141,7 @@ export default class Scheduler extends Component {
 
         this._sortTaskState();
 
-        this._chekCompleteAll();
+        this._getAllCompleted();
 
     };
 
@@ -199,7 +199,7 @@ export default class Scheduler extends Component {
 
     };
 
-    _chekCompleteAll = () =>
+    _getAllCompleted = () =>
         this.setState({ completeAll: !this.state.tasks.filter((task) => task.completed === false).length });
 
 
