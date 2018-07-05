@@ -122,7 +122,7 @@ export default class Scheduler extends Component {
             this._setTasksFetchingState(false);
         }
     };
-    _updateDBTaskAsync = async (updTask) => {
+    _updateTaskAsync = async (updTask) => {
         try {
             this._setTasksFetchingState(true);
             await api.updateTask([updTask]);
@@ -168,7 +168,7 @@ export default class Scheduler extends Component {
 
         updTask[field]= field !== 'message'?!updTask[field]:textMessage[0];
         this._updateSateTask(updTask);
-        this._updateDBTaskAsync(updTask);
+        this._updateTaskAsync(updTask);
     };
 
     _getCompleteAll = () => {
