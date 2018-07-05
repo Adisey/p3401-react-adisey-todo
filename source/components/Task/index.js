@@ -136,8 +136,6 @@ export default class Task extends PureComponent {
                     ref = { (input) => this.input = input }
                     type = 'text'
                     onKeyDown = { this._updateTaskMessageOnKeyDown }
-                    onKeyPress = { this._inputKeyPress }
-
                 />
             </div>
         );
@@ -150,8 +148,6 @@ export default class Task extends PureComponent {
             this.input.value = message;
             this._editTask();
         }
-    };
-    _inputKeyPress = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
             this._editTask();
