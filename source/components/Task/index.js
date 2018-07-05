@@ -77,9 +77,9 @@ export default class Task extends PureComponent {
     _getRemoveTask = () => {
         return (
             <Remove
-                onClick = { this._removeTask }
                 color1 = { '#3B8EF3' }
                 color2 = { '#000' }
+                onClick = { this._removeTask }
             />
         );
     };
