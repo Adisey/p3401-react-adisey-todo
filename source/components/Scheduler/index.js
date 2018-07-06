@@ -77,15 +77,15 @@ export default class Scheduler extends Component {
 
 
     _createTaskAsync = async (newMessage) => {
-        let { newTaskMessage } = this.state;
-        //// ToDo Спросить у Андрей почету из "_keyPressNewTaskMessage" работает всегда, и не ререндорится
-        // страница, когда я прямон на кнопку повесил, работает через раз, постоянный реренденринг
-        // ниже код, с которым проблем небыло ((((((
+        const { newTaskMessage } = this.state;
+        //// ToDo Спросить у Андрей почету из "_keyPressNewTaskMessage" (по кнопке) работает всегда,
+        // и не ререндорится страница, когда я прямон на кнопку повесил, работает через раз,
+        // постоянный реренденринг ниже код, с которым проблем небыло ((((((
 
         this._setTasksFetchingState(true);
 
         // ToDo Специально для тестов, пока не знаю, как из инпута передавать параметром значение.
-        newTaskMessage = newMessage?newMessage:newTaskMessage;
+        // newTaskMessage = newMessage?newMessage:newTaskMessage;
 
         if (newTaskMessage) {
             this._setTasksFetchingState(true);
@@ -185,7 +185,7 @@ export default class Scheduler extends Component {
     };
 
     /**
-     * _updateSateAndDBAsync  -  функция для изменения параметров Task и ианесения их в State и DB.
+     * _updateSateAndDBAsync  -  функция для изменения параметров Task и занесения их в State и DB.
      * @author Adisey.
      * @param {string} id сообщения для изменения
      * @param {string} field Поле для изменения (favorite, completed, message, и др.)
