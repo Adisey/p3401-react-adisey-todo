@@ -1,5 +1,6 @@
 // Core
 import React, { Component } from 'react';
+import FlipMove from 'react-flip-move';
 
 // Instruments
 import Styles from './styles.m.css';
@@ -333,10 +334,7 @@ export default class Scheduler extends Component {
         return (
             <section className = { Styles.scheduler }>
                 <main>
-                    <Spinner
-                        isTasksFetching = { isTasksFetching }
-
-                    />
+                    <Spinner />
                     <header>
                         <h1 className = 'test'>Планировщик задач</h1>
                         <input
@@ -362,7 +360,7 @@ export default class Scheduler extends Component {
                             {/*<button>Добавить задачу</button>*/}
                         </form>
                         <div>
-                            <ul>{_showTasks}</ul>
+                            <ul><FlipMove>{_showTasks}</FlipMove></ul>
                         </div>
 
                     </section>
