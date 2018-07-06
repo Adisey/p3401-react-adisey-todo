@@ -225,16 +225,12 @@ export default class Scheduler extends Component {
         } = this.state;
 
         return (
-            <div>
-                <div>
-                    <Checkbox
-                        checked = { completeAll }
-                        color1 = { '#3B8EF3' }
-                        color2 = { '#FFF' }
-                        onClick = { this._runCompleteAll }
-                    />
-                </div>
-            </div>
+            <Checkbox
+                checked = { completeAll }
+                color1 = { '#3B8EF3' }
+                color2 = { '#FFF' }
+                onClick = { this._runCompleteAll }
+            />
         );
     };
     _runCompleteAll = () => {
@@ -359,10 +355,7 @@ export default class Scheduler extends Component {
                             <button type = 'submit' >Добавить задачу</button>
                             {/*<button>Добавить задачу</button>*/}
                         </form>
-                        <div>
-                            <ul><FlipMove>{_showTasks}</FlipMove></ul>
-                        </div>
-
+                        <ul><FlipMove>{_showTasks}</FlipMove></ul>
                     </section>
                     <footer>
                         {CompleteAll}
