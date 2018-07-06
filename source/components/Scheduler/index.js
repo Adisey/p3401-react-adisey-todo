@@ -87,9 +87,7 @@ export default class Scheduler extends Component {
         // ToDo Специально для тестов, пока не знаю, как из инпута передавать параметром значение.
         newTaskMessage = newMessage?newMessage:newTaskMessage;
 
-        console.log(`newTaskMessage`, newTaskMessage);
         if (newTaskMessage) {
-            console.log(`11111111111`);
             this._setTasksFetchingState(true);
             try {
                 const newTasks = await api.createTask(newTaskMessage);
@@ -100,7 +98,6 @@ export default class Scheduler extends Component {
 
             } catch ({ errorMessage }) {
                 console.error(errorMessage);
-                console.log(`---------------------------`);
             } finally {
                 this._sortTaskState();
                 this._getAllCompleted();
@@ -108,13 +105,11 @@ export default class Scheduler extends Component {
                 this._setTasksFetchingState(false);
             }
         } else {
-            console.log(`newTaskMessage   Spase `, newTaskMessage);
             this._setTasksFetchingState(false);
 
             return null;
 
         }
-        console.log(`+++++++++++++++++++`);
 
     };
     //    _createTaskAsync = async (newTaskMessage) => {
@@ -295,7 +290,6 @@ export default class Scheduler extends Component {
     };
     _keyDownTasksFilter = (e) => {
         if (e.key === "Escape" || e.keyCode === 27|| e.which === 27) {
-            console.log(`_keyDownTasksFilter-----Esc----`);
             e.preventDefault();
             this.setState({ tasksFilter: '' });
             // ToDo пока не понимаю, почему после обновления фильтра в стейт, не отрабатывает проверка на Комплит,
@@ -330,7 +324,9 @@ export default class Scheduler extends Component {
         return (
             <section className = { Styles.scheduler }>
                 <main>
-                    <Spinner />
+                    <Spinner
+                        isTasksFetching
+                    />
                     <header>
                         <h1 className = 'test'>Планировщик задач</h1>
                         <input
